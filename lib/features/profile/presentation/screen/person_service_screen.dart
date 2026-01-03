@@ -392,7 +392,7 @@ class ServiceProfileScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        AppString.image_available_now,
+                        AppString.image_available_now.tr,
                         style: TextStyle(
                           fontSize: 10,
                           color: Colors.grey[600],

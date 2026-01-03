@@ -38,6 +38,7 @@ class SettingItem extends StatelessWidget {
         ],
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           /// show icon here
           Container(
@@ -56,12 +57,15 @@ class SettingItem extends StatelessWidget {
           ),
 
           /// show Title here
-          CommonText(
-            text: title,
-            color: titleColor ?? AppColors.secondary,
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-            left: 12,
+          Expanded(
+            child: CommonText(
+              text: title,
+              color: titleColor ?? AppColors.secondary,
+              fontWeight: FontWeight.w500,
+              textAlign: TextAlign.left,
+              fontSize: 14,
+              left: 12,
+            ),
           ),
         ],
       ),

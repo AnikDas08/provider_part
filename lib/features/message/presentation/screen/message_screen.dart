@@ -343,7 +343,7 @@ class MessageScreen extends StatelessWidget {
               child: TextField(
                 controller: controller.messageController,
                 decoration: InputDecoration(
-                  hintText: "Type......",
+                  hintText: AppString.hint_type_here,
                   hintStyle: TextStyle(
                     fontSize: 16.sp,
                     color: AppColors.black400,

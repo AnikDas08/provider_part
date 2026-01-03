@@ -55,6 +55,7 @@ class EditServiceController extends GetxController {
   // Service pairs
   RxList<ServicePair> servicePairs = <ServicePair>[].obs;
   RxList<String> selectedLanguages = <String>[].obs;
+  RxBool isInitializing = true.obs;
 
   // API Data - Changed to use Map format like complete profile controller
   var categories = <Map<String, dynamic>>[].obs;
@@ -146,9 +147,33 @@ class EditServiceController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchCategories(); // Fetch all categories first
-    getProviderInformation();
-    getCurrentLocation();
+    _initializeScreen();
+  }
+
+  // NEW: Sequential initialization with error handling
+  Future<void> _initializeScreen() async {
+    try {
+      isInitializing.value = true;
+
+      // Get location in background (non-blocking)
+      getCurrentLocation().catchError((error) {
+        print("Location error: $error");
+      });
+
+      // Fetch categories FIRST (with timeout)
+      await fetchCategories().timeout(Duration(seconds: 15));
+
+      // Then fetch provider data
+      await getProviderInformation().timeout(Duration(seconds: 15));
+
+      isLoading.value = false;
+    } catch (e) {
+      // Show error and provide fallback
+      Get.snackbar("Error", "Failed to load data");
+      if (servicePairs.isEmpty) {
+        servicePairs.add(ServicePair());
+      }
+    }
   }
 
   @override

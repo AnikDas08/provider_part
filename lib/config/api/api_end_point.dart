@@ -1,7 +1,7 @@
 class ApiEndPoint {
-  static const baseUrl = "https://delwar5000.binarybards.online/api/v1/";
-  static const imageUrl = "https://delwar5000.binarybards.online/";
-  static const socketUrl = "https://delwar5000.binarybards.online";
+  static const baseUrl = "http://72.61.159.185:5000/api/v1/";
+  static const imageUrl = "http://72.61.159.185:5000";
+  static const socketUrl = "http://72.61.159.185:5000";
 
   static const signUp = "user/user";
   static const verifyEmail = "users/verify-email";

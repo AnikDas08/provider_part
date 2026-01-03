@@ -258,6 +258,7 @@ Map<String, String> russian = {
   AppString.selectLocation: "Выберите местоположение",
   AppString.subject: "Тема",
   AppString.qr_text: "QR-код",
+  AppString.image_available_now: "Изображение недоступно",
   AppString.qr_details: "Пожалуйста, разрешите поставщику услуг отсканировать QR-код ниже для завершения услуги.",
   AppString.qr_name: "MD Kamran khan",
   AppString.qr_id: "ID пользователя: ",
@@ -266,4 +267,17 @@ Map<String, String> russian = {
   AppString.scan: "Сканировать",
   AppString.pauseScan: "Сканер приостановлен",
   AppString.privacy_policy_texts: "Lorem ipsum dolor sit amet consectetur. Eget imperdiet ultrices adipiscing et vitae adipiscing ornare. Vel tristique lorem viverra lorem sem consequat cras dui. Nisl libero nisl nec vulputate quam quis. Orci tempor pulvinar amet mi at et ac ipsum. Sed non massa accumsan dolor venenatis eleifend. Netus semper integer purus praesent nulla porttitor nibh. Lobortis ornare feugiat dictum eu cursus a platea fermentum. Tellus dolor a sit morbi. Elementum diam tortor est erat ultricies quam sed nibh. Eros pellentesque eu est lectus. Nunc facilisi ipsum senectus dolor adipiscing id pretium consectetur. Hendrerit aliquam lectus urna at commodo ultrices volutpat pulvinar donec. In ut sagittis placerat ut in. Sit erat accumsan eget libero fringilla metus. Est venenatis commodo ut velit non aenean in pulvinar. Pretium pretium aliquet at nec ut malesuada augue sed a. Turpis vestibulum dolor leo aliquam rhoncus fermentum. Elit congue diam euismod tempus nunc bibendum. Tempus sit dis sem non dignissim.",
+  AppString.mon: "Пн",
+  AppString.tue: "Вт",
+  AppString.wed: "Ср",
+  AppString.thu: "Чт",
+  AppString.fri: "Пт",
+  AppString.sat: "Сб",
+  AppString.sun: "Вс",
+
+  AppString.password_show: "Введите ваш пароль, чтобы подтвердить вашу учетную запись.",
+  AppString.enter_password: "Введите ваш пароль",
+  AppString.chat_not: "Чатов не найдено",
+  AppString.select_schedule: "Выберите расписание",
+
 };

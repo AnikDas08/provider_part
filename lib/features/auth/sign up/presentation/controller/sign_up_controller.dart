@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:haircutmen_user_app/utils/constants/app_string.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl_phone_field/countries.dart';
 import 'package:haircutmen_user_app/utils/helpers/other_helper.dart';
 
@@ -11,6 +13,45 @@ import '../../../../../config/route/app_routes.dart';
 import '../../../../../services/api/api_service.dart';
 import '../../../../../config/api/api_end_point.dart';
 import '../../../../../utils/app_utils.dart';
+
+
+class LocationModel {
+  final String displayName; // full name
+  final String lat;
+  final String lon;
+  final String shortName; // City, State, Country dynamically
+
+  LocationModel({
+    required this.displayName,
+    required this.lat,
+    required this.lon,
+    required this.shortName,
+  });
+
+  factory LocationModel.fromJson(Map<String, dynamic> json) {
+    final address = json['address'] ?? {};
+    String city = address['city'] ?? address['town'] ?? address['village'] ?? '';
+    String state = address['state'] ?? '';
+    String country = address['country'] ?? '';
+
+    String shortName = '';
+    if (city.isNotEmpty && state.isNotEmpty && country.isNotEmpty) {
+      shortName = "$city, $state, $country";
+    } else {
+      // fallback if address not available
+      List<String> parts = (json['display_name'] as String).split(',');
+      shortName = parts.take(3).map((e) => e.trim()).join(', ');
+    }
+
+    return LocationModel(
+      displayName: json['display_name'],
+      lat: json['lat'],
+      lon: json['lon'],
+      shortName: shortName,
+    );
+  }
+}
+
 
 class SignUpController extends GetxController {
   /// Sign Up Form Key
@@ -24,9 +65,19 @@ class SignUpController extends GetxController {
   String countryCode = '+880'; // Stores selected country code
   String countryFlag = '🇧🇩';
 
-  //Timer? _timer;
-  //int start = 0;
+  List<LocationModel> locationSuggestions = [];
+  bool isLocationLoading = false;
+  String? latitude;
+  String? longitude;
+  Timer? _debounce;
 
+  /// Call this when user types in the location field
+  void onLocationChanged(String value) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      searchLocation(value);
+    });
+  }
   //String time = "";
 
   List selectedOption = ["User", "Consultant"];
@@ -79,6 +130,44 @@ class SignUpController extends GetxController {
 
   openGallery() async {
     image = await OtherHelper.openGallery();
+    update();
+  }
+
+  Future<void> searchLocation(String query) async {
+    if (query.isEmpty) {
+      locationSuggestions.clear();
+      update();
+      return;
+    }
+
+    isLocationLoading = true;
+    update();
+
+    final url = Uri.parse(
+        'https://nominatim.openstreetmap.org/search'
+            '?q=${Uri.encodeComponent(query)}&format=json&addressdetails=1&limit=5'
+
+    );
+
+    final response = await http.get(url, headers: {"User-Agent": "HaircutMenApp"});
+
+    if (response.statusCode == 200) {
+      final List data = jsonDecode(response.body);
+      locationSuggestions = data.map((e) => LocationModel.fromJson(e)).toList();
+    } else {
+      locationSuggestions.clear();
+    }
+
+    isLocationLoading = false;
+    update();
+  }
+
+  /// Call this when user selects a location from suggestions
+  void selectLocation(LocationModel location) {
+    locationController.text = location.shortName; // show only short name
+    latitude = location.lat;
+    longitude = location.lon;
+    locationSuggestions.clear();
     update();
   }
 
