@@ -500,7 +500,6 @@ class CompleteProfileController extends GetxController {
       ) async {
     try {
       Dio dio = Dio();
-
       // Configure Dio
       dio.options.baseUrl = ApiEndPoint.baseUrl;
       dio.options.connectTimeout = const Duration(seconds: 60);

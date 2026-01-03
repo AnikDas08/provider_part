@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:haircutmen_user_app/config/route/app_routes.dart';
 import 'package:haircutmen_user_app/features/home/presentation/controller/home_controller.dart';
+import 'package:haircutmen_user_app/utils/constants/app_string.dart';
 import '../../../../services/api/api_service.dart';
 
 class PendingViewDetailsController extends GetxController {
@@ -150,7 +151,7 @@ class PendingViewDetailsController extends GetxController {
 
       if (fullBookingId.isEmpty) {
         Get.snackbar(
-          'Error',
+          AppString.error,
           'Invalid booking ID',
           snackPosition: SnackPosition.BOTTOM,
         );
