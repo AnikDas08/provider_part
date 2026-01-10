@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:haircutmen_user_app/component/app_storage/storage_key.dart';
-
-Rx<GetStorage> box = GetStorage().obs;
 class AppAuthStorage {
   GetStorage box = GetStorage();
 

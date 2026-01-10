@@ -15,7 +15,7 @@ class StorageKey {
   static const String loginValue = "loginValue";
   static const String sucessGetdata = "sucessGetdata";
   static const String loginUserRole = "loginUserRole";
-  static const String language = "lan";
+  static const String language = "language";
   static const String arabic = "ar";
   static const String french = "fr";
 // static const String notificationData = "notificationData";

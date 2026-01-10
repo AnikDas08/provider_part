@@ -37,7 +37,7 @@ class ContractsScreen extends StatelessWidget {
                 SizedBox(height: 10.h,),
                 CommonTextField(
                   controller: controller.subjectController,
-                  hintText: AppString.hint_type_here,
+                  hintText: AppString.hint_type_here.tr,
                 ),
                 SizedBox(height: 20.h,),
                 CommonText(
@@ -49,7 +49,7 @@ class ContractsScreen extends StatelessWidget {
                 SizedBox(height: 5.h,),
                 CommonTextField(
                   controller: controller.messageController,
-                  hintText: AppString.hint_type_here,
+                  hintText: AppString.hint_type_here.tr,
                   maxLines: 5,
                 ),
                 Spacer(),

@@ -3,23 +3,23 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:haircutmen_user_app/features/auth/sign%20up/presentation/controller/sign_up_controller.dart';
 import '../../../../../utils/constants/app_colors.dart';
 import '../../../../../utils/helpers/other_helper.dart';
 import '../../../../../utils/constants/app_string.dart';
 import '../../../../../component/text/common_text.dart';
 import '../../../../../component/text_field/common_text_field.dart';
-import '../controller/sign_up_controller.dart';
 
-class SignUpAllField extends StatefulWidget {
-  const SignUpAllField({super.key, required this.controller});
+class SignUpAllFiled extends StatefulWidget {
+  const SignUpAllFiled({super.key, required this.controller});
 
   final SignUpController controller;
 
   @override
-  State<SignUpAllField> createState() => _SignUpAllFieldState();
+  State<SignUpAllFiled> createState() => _SignUpAllFieldState();
 }
 
-class _SignUpAllFieldState extends State<SignUpAllField> {
+class _SignUpAllFieldState extends State<SignUpAllFiled> {
   Country selectedCountry = Country(
     phoneCode: '880',
     countryCode: 'BD',
@@ -111,11 +111,49 @@ class _SignUpAllFieldState extends State<SignUpAllField> {
           bottom: 6,
           top: 12,
         ),
-        CommonTextField(
-          hintText: AppString.location_hint,
-          hintTextColor: AppColors.black100,
-          controller: widget.controller.locationController,
-          validator: OtherHelper.validator,
+        Column(
+          children: [
+            CommonTextField(
+              hintText: AppString.location_hint,
+              hintTextColor: AppColors.black100,
+              controller: widget.controller.locationController,
+              validator: OtherHelper.validator,
+              onChanged: widget.controller.onLocationChanged,
+            ),
+            if (widget.controller.locationSuggestions.isNotEmpty)
+              Container(
+                constraints: const BoxConstraints(maxHeight: 200),
+                margin: const EdgeInsets.only(top: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(10.r),
+                  border: Border.all(color: AppColors.black50),
+                ),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.controller.locationSuggestions.length,
+                  itemBuilder: (context, index) {
+                    final location = widget.controller.locationSuggestions[index];
+                    return ListTile(
+                      dense: true,
+                      title: Text(
+                        location.displayName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.roboto(
+                          fontSize: 13.sp,
+                          color: AppColors.black,
+                        ),
+                      ),
+                      onTap: () {
+                        widget.controller.selectLocation(location);
+                        FocusScope.of(context).unfocus();
+                      },
+                    );
+                  },
+                ),
+              ),
+          ],
         ),
 
         /// User Password here

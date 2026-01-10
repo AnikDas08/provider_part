@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:haircutmen_user_app/component/text/common_text.dart';
 import 'package:haircutmen_user_app/utils/constants/app_string.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../utils/constants/app_colors.dart';
@@ -43,10 +44,7 @@ class OverviewScreen extends StatelessWidget {
                     lastDay: DateTime.utc(2030, 12, 31),
                     focusedDay: controller.focusedDay.value,
                     selectedDayPredicate: (day) {
-                      // Only show selected color if selectedDay is not null
-                      if (controller.selectedDay.value == null) {
-                        return false;
-                      }
+                      if (controller.selectedDay.value == null) return false;
                       return isSameDay(controller.selectedDay.value, day);
                     },
                     calendarFormat: CalendarFormat.week,
@@ -55,6 +53,81 @@ class OverviewScreen extends StatelessWidget {
                     onPageChanged: (focusedDay) {
                       controller.focusedDay.value = focusedDay;
                     },
+
+                    // 1. HEADER TRANSLATION
+                    headerStyle: HeaderStyle(
+                      formatButtonVisible: false,
+                      titleCentered: true,
+                      leftChevronVisible: true,
+                      rightChevronVisible: true,
+                    ),
+
+                    calendarBuilders: CalendarBuilders(
+                      // CUSTOMIZE THE MONTH/YEAR HEADER
+                      headerTitleBuilder: (context, day) {
+                        // You can translate month names: 'january'.tr
+                        //final monthName = DateFormat('MMMM').format(day).toLowerCase().tr;
+                        final year = DateFormat('yyyy').format(day);
+
+                        final List<String> monthKeys = [
+                          AppString.january_text.tr,
+                          AppString.february_text.tr,
+                          AppString.march_text.tr,
+                          AppString.april_text.tr,
+                          AppString.may_text.tr,
+                          AppString.june_text.tr,
+                          AppString.july_text.tr,
+                          AppString.august_text.tr,
+                          AppString.september_text.tr,
+                          AppString.october_text.tr,
+                          AppString.november_text.tr,
+                          AppString.december_text.tr,
+
+                        ];
+
+                        // day.month is 1-12
+                        final String monthName = monthKeys[day.month - 1];
+
+                        return Center(
+                          child: Text(
+                            "$monthName $year",
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        );
+                      },
+
+                      // 2. DAYS OF WEEK TRANSLATION
+                      dowBuilder: (context, day) {
+                        // Logic to get the day name key
+                        final weekdayNames = [
+                          AppString.mon.tr,
+                          AppString.tue.tr,
+                          AppString.wed.tr,
+                          AppString.thu.tr,
+                          AppString.fri.tr,
+                          AppString.sat.tr,
+                          AppString.sun.tr,
+                        ];
+
+                        // day.weekday: 1 = Mon, 7 = Sun
+                        final text = weekdayNames[day.weekday - 1];
+
+                        return Center(
+                          child: Text(
+                            text.tr,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: day.weekday == DateTime.sunday ? Colors.red : Colors.black54,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
                     calendarStyle: CalendarStyle(
                       outsideDaysVisible: false,
                       selectedDecoration: BoxDecoration(
@@ -73,18 +146,8 @@ class OverviewScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    headerStyle: HeaderStyle(
-                      formatButtonVisible: false,
-                      titleCentered: true,
-                      leftChevronVisible: true,
-                      rightChevronVisible: true,
-                      titleTextStyle: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primaryColor
-                      ),
-                    ),
-                  )),
+                  )
+                ),
                 ),
 
                 SizedBox(height: 16.h),
@@ -441,7 +504,7 @@ class OverviewScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            controller.workingTimes[day]!['start']!.isEmpty ? AppString.select_start_time : startTimeText,
+                            controller.workingTimes[day]!['start']!.isEmpty ? AppString.select_start_time.tr : startTimeText,
                             style: TextStyle(
                               fontSize: 14.sp,
                               color: isPlaceholder ? Colors.grey[500]! : Colors.black87,
@@ -476,7 +539,7 @@ class OverviewScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            controller.workingTimes[day]!['end']!.isEmpty ? AppString.select_end_time : endTimeText,
+                            controller.workingTimes[day]!['end']!.isEmpty ? AppString.select_end_time.tr : endTimeText,
                             style: TextStyle(
                               fontSize: 14.sp,
                               color: isPlaceholder ? Colors.grey[500]! : Colors.black87,

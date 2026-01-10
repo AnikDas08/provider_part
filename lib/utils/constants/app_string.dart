@@ -366,4 +366,20 @@ class AppString {
   static const String scan = "Scan";
   static const String pauseScan = "Scanner is paused";
   static const String privacy_policy_texts = "Lorem ipsum dolor sit amet consectetur. Eget imperdiet ultrices adipiscing et vitae adipiscing ornare. Vel tristique lorem viverra lorem sem consequat cras dui. Nisl libero nisl nec vulputate quam quis. Orci tempor pulvinar amet mi at et ac ipsum. Sed non massa accumsan dolor venenatis eleifend. Netus semper integer purus praesent nulla porttitor nibh. Lobortis ornare feugiat dictum eu cursus a platea fermentum. Tellus dolor a sit morbi. Elementum diam tortor est erat ultricies quam sed nibh. Eros pellentesque eu est lectus. Nunc facilisi ipsum senectus dolor adipiscing id pretium consectetur. Hendrerit aliquam lectus urna at commodo ultrices volutpat pulvinar donec. In ut sagittis placerat ut in. Sit erat accumsan eget libero fringilla metus. Est venenatis commodo ut velit non aenean in pulvinar. Pretium pretium aliquet at nec ut malesuada augue sed a. Turpis vestibulum dolor leo aliquam rhoncus fermentum. Elit congue diam euismod tempus nunc bibendum. Tempus sit dis sem non dignissim.";
+
+
+
+  static const String chat_not="No chats found";
+  static const String select_schedule="Select Schedule";
+
+  static const String password_show="Give your password to confirm your account.";
+  static const String enter_password="Enter Your Password";
+
+  static const String sat="Sat";
+  static const String sun="Sun";
+  static const String mon="Mon";
+  static const String tue="Tue";
+  static const String wed="Wed";
+  static const String thu="Thu";
+  static const String fri="Fri";
 }

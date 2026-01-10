@@ -69,7 +69,7 @@ class ChangePasswordScreen extends StatelessWidget {
                                   ),
                                   CommonTextField(
                                     controller: controller.currentPasswordController,
-                                    hintText: AppString.old_password_hint,
+                                    hintText: AppString.old_password_hint.tr,
                                     hintTextColor: AppColors.black200,
                                     validator: OtherHelper.passwordValidator,
                                     isPassword: true,
@@ -84,7 +84,7 @@ class ChangePasswordScreen extends StatelessWidget {
                                   ),
                                   CommonTextField(
                                     controller: controller.newPasswordController,
-                                    hintText: AppString.hint_new_password,
+                                    hintText: AppString.hint_new_password.tr,
                                     validator: OtherHelper.passwordValidator,
                                     isPassword: true,
                                     //prefixIcon: Icon(Icons.lock, size: 20.sp),
@@ -98,7 +98,7 @@ class ChangePasswordScreen extends StatelessWidget {
                                   ),
                                   CommonTextField(
                                     controller: controller.confirmPasswordController,
-                                    hintText: AppString.hint_confirm_password,
+                                    hintText: AppString.hint_confirm_password.tr,
                                     validator:
                                         (value) => OtherHelper.confirmPasswordValidator(
                                           value,

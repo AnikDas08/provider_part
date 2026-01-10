@@ -25,7 +25,7 @@ class ChatListScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text(
-            AppString.message_text,
+            AppString.message_text.tr,
             style: GoogleFonts.roboto(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
@@ -81,7 +81,7 @@ class ChatListScreen extends StatelessWidget {
                                 controller.searchByName(value);
                               },
                               decoration: InputDecoration(
-                                hintText: AppString.search_text,
+                                hintText: AppString.search_text.tr,
                                 hintStyle: GoogleFonts.roboto(
                                   fontSize: 14.sp,
                                   color: AppColors.black100,
@@ -121,8 +121,8 @@ class ChatListScreen extends StatelessWidget {
                           child: Center(
                             child: Text(
                               controller.searchController.text.isNotEmpty
-                                  ? "No chats found"
-                                  : AppString.messageNot,
+                                  ? AppString.chat_not
+                                  : AppString.messageNot.tr,
                               style: GoogleFonts.roboto(
                                 fontSize: 14.sp,
                                 color: AppColors.black100,
@@ -177,28 +177,53 @@ class ChatListScreen extends StatelessWidget {
         ),
         child: Row(
           children: [
-            ClipOval(
-              child: Container(
-                  width: 50.w,
-                  height: 50.w,
-                  decoration: BoxDecoration(
-                    color: AppColors.black100,
-                    shape: BoxShape.circle,
-                  ),
-                  child: message.participant.image!=""?Image.network(
-                    ApiEndPoint.socketUrl+message.participant.image,
-                    width: 50.w,
-                    height: 50.w,
-                    fit: BoxFit.cover,
-                  ):Image.asset(
-                      "assets/images/noImage.png",
-                      height: 50.h,
-                      width: 50.w,
-                      fit:BoxFit.cover
-                  )
-              ),
-            ),
-            SizedBox(width: 12.w),
+        ClipOval(
+        child: Container(
+        width: 50.w,
+          height: 50.w,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.black100,
+          ),
+          child: message.participant.image != ""
+              ? Image.network(
+            ApiEndPoint.socketUrl + message.participant.image,
+            width: 50.w,
+            height: 50.w,
+            fit: BoxFit.cover,
+
+            // 🔄 Loading state
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return Center(
+                child: SizedBox(
+                  width: 20.w,
+                  height: 20.w,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              );
+            },
+
+            // ❌ Error state
+            errorBuilder: (context, error, stackTrace) {
+              return Image.asset(
+                "assets/images/profile_image.jpg",
+                width: 50.w,
+                height: 50.w,
+                fit: BoxFit.cover,
+              );
+            },
+          )
+              : Image.asset(
+            "assets/images/profile_image.jpg",
+            width: 50.w,
+            height: 50.w,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+
+        SizedBox(width: 12.w),
 
             // Message Content
             Expanded(

@@ -94,6 +94,8 @@ class ServiceProfileScreen extends StatelessWidget {
         
                     // Location
                     Obx(() => Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SvgPicture.asset(
                           "assets/icons/location_icon.svg",
@@ -102,14 +104,17 @@ class ServiceProfileScreen extends StatelessWidget {
                           color: AppColors.black400,
                         ),
                         SizedBox(width: 4.w),
-                        CommonText(
-                          text: controller.primaryLocation.value.isEmpty
-                              ? AppString.nolocation
-                              : controller.primaryLocation.value,
-                          fontSize: 16.sp,
-                          color: AppColors.black300,
-                          fontWeight: FontWeight.w400,
-                          maxLines: 2,
+                        Flexible(
+                          child: CommonText(
+                            text: controller.primaryLocation.value.isEmpty
+                                ? AppString.nolocation
+                                : controller.primaryLocation.value,
+                            fontSize: 12.sp,
+                            color: AppColors.black300,
+                            textAlign: TextAlign.start,
+                            fontWeight: FontWeight.w400,
+                            maxLines: 5,
+                          ),
                         ),
                       ],
                     )),
@@ -392,7 +397,7 @@ class ServiceProfileScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        AppString.image_available_now,
+                        AppString.image_available_now.tr,
                         style: TextStyle(
                           fontSize: 10,
                           color: Colors.grey[600],

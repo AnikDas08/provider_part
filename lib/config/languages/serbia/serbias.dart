@@ -26,6 +26,7 @@ Map<String, String> serbian = {
   AppString.createYourNewPassword: "Napravite vašu novu lozinku",
   AppString.password: "Lozinka",
   AppString.continues: "Nastavi",
+  AppString.image_available_now: "Slika nije dostupna",
   AppString.resend_otp: "Ponovo pošalji OTP",
   AppString.email: "Email",
   AppString.codeHasBeenSendTo: "Kod je poslat na",
@@ -267,4 +268,19 @@ Map<String, String> serbian = {
   AppString.scan: "Skeniraj",
   AppString.pauseScan: "Skener je pauziran",
   AppString.privacy_policy_texts: "Lorem ipsum dolor sit amet consectetur. Eget imperdiet ultrices adipiscing et vitae adipiscing ornare. Vel tristique lorem viverra lorem sem consequat cras dui. Nisl libero nisl nec vulputate quam quis. Orci tempor pulvinar amet mi at et ac ipsum. Sed non massa accumsan dolor venenatis eleifend. Netus semper integer purus praesent nulla porttitor nibh. Lobortis ornare feugiat dictum eu cursus a platea fermentum. Tellus dolor a sit morbi. Elementum diam tortor est erat ultricies quam sed nibh. Eros pellentesque eu est lectus. Nunc facilisi ipsum senectus dolor adipiscing id pretium consectetur. Hendrerit aliquam lectus urna at commodo ultrices volutpat pulvinar donec. In ut sagittis placerat ut in. Sit erat accumsan eget libero fringilla metus. Est venenatis commodo ut velit non aenean in pulvinar. Pretium pretium aliquet at nec ut malesuada augue sed a. Turpis vestibulum dolor leo aliquam rhoncus fermentum. Elit congue diam euismod tempus nunc bibendum. Tempus sit dis sem non dignissim.",
+
+  AppString.mon: "Pon",
+  AppString.tue: "Uto",
+  AppString.wed: "Sre",
+  AppString.thu: "Čet",
+  AppString.fri: "Pet",
+  AppString.sat: "Sub",
+  AppString.sun: "Ned",
+
+  AppString.password_show: "Unesite svoju lozinku da potvrdite svoj nalog.",
+  AppString.enter_password: "Unesite svoju lozinku",
+
+  AppString.chat_not: "Nijedan razgovor nije pronađen",
+  AppString.select_schedule: "Odaberite raspored",
+
 };

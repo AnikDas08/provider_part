@@ -183,81 +183,92 @@ class HomeScreen extends StatelessWidget {
                         firstDay: DateTime.utc(2020, 1, 1),
                         lastDay: DateTime.utc(2030, 12, 31),
                         focusedDay: controller.focusedDay,
-                        selectedDayPredicate: (day) {
-                          // Only show selection for Upcoming filter
-                          if (controller.selectedFilter != 0) {
-                            return false;
-                          }
-                          return isSameDay(controller.selectedDay, day);
-                        },
+                        selectedDayPredicate: (day) => isSameDay(controller.selectedDay, day),
                         calendarFormat: CalendarFormat.week,
                         startingDayOfWeek: StartingDayOfWeek.sunday,
-                        onDaySelected: controller.selectedFilter == 0
-                            ? controller.onDaySelected
-                            : null, // Disable callback when not Upcoming
+                        onDaySelected: controller.onDaySelected,
                         onPageChanged: (focusedDay) {
-                          if (controller.selectedFilter == 0) {
-                            controller.onPageChanged(focusedDay);
-                          }
+                          controller.focusedDay = focusedDay;
                         },
+
+                        headerStyle: HeaderStyle(
+                          formatButtonVisible: false,
+                          titleCentered: true,
+                          leftChevronVisible: true,
+                          rightChevronVisible: true,
+                        ),
+
+                        calendarBuilders: CalendarBuilders(
+                          // HEADER MONTH TRANSLATION
+                          headerTitleBuilder: (context, day) {
+                            final year = day.year.toString();
+                            final List<String> monthKeys = [
+                              AppString.january_text.tr, AppString.february_text.tr, AppString.march_text.tr,
+                              AppString.april_text.tr, AppString.may_text.tr, AppString.june_text.tr,
+                              AppString.july_text.tr, AppString.august_text.tr, AppString.september_text.tr,
+                              AppString.october_text.tr, AppString.november_text.tr, AppString.december_text.tr,
+                            ];
+                            final String monthName = monthKeys[day.month - 1];
+
+                            return Center(
+                              child: Text(
+                                "$monthName $year".tr,
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.primaryColor,
+                                ),
+                              ),
+                            );
+                          },
+
+                          // DAYS OF WEEK TRANSLATION
+                          dowBuilder: (context, day) {
+                            final weekdayNames = [
+                              AppString.mon.tr,
+                              AppString.tue.tr,
+                              AppString.wed.tr,
+                              AppString.thu.tr,
+                              AppString.fri.tr,
+                              AppString.sat.tr,
+                              AppString.sun.tr,
+                            ];
+
+                            // Note: day.weekday (1=Mon, 7=Sun)
+                            final text = weekdayNames[day.weekday - 1];
+
+                            return Center(
+                              child: Text(
+                                text, // Removed extra .tr here
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: day.weekday == DateTime.sunday ? Colors.red : Colors.black54,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+
                         calendarStyle: CalendarStyle(
                           outsideDaysVisible: false,
                           selectedDecoration: BoxDecoration(
-                            color: controller.selectedFilter == 0
-                                ? AppColors.primaryColor
-                                : Colors.grey.shade400,
+                            color: AppColors.primaryColor,
                             shape: BoxShape.circle,
                           ),
                           todayDecoration: BoxDecoration(
-                            color: controller.selectedFilter == 0
-                                ? AppColors.primaryColor.withOpacity(0.5)
-                                : Colors.grey.shade300,
+                            color: AppColors.primaryColor.withOpacity(0.5),
                             shape: BoxShape.circle,
                           ),
-                          defaultTextStyle: TextStyle(
-                            fontSize: 14.sp,
-                            color: controller.selectedFilter != 0
-                                ? Colors.grey.shade400
-                                : Colors.black,
-                          ),
-                          weekendTextStyle: TextStyle(
-                            fontSize: 14.sp,
-                            color: controller.selectedFilter != 0
-                                ? Colors.grey.shade400
-                                : Colors.black,
-                          ),
+                          defaultTextStyle: TextStyle(fontSize: 14.sp),
+                          weekendTextStyle: TextStyle(fontSize: 14.sp),
                           selectedTextStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        headerStyle: HeaderStyle(
-                          formatButtonVisible: false,
-                          titleCentered: true,
-                          leftChevronVisible: controller.selectedFilter == 0,
-                          rightChevronVisible: controller.selectedFilter == 0,
-                          titleTextStyle: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                            color: controller.selectedFilter == 0
-                                ? AppColors.primaryColor
-                                : Colors.grey.shade400,
-                          ),
-                          leftChevronIcon: Icon(
-                            Icons.chevron_left,
-                            color: controller.selectedFilter == 0
-                                ? AppColors.primaryColor
-                                : Colors.grey.shade400,
-                          ),
-                          rightChevronIcon: Icon(
-                            Icons.chevron_right,
-                            color: controller.selectedFilter == 0
-                                ? AppColors.primaryColor
-                                : Colors.grey.shade400,
-                          ),
-                        ),
-                      ),
+                      )
                     ),
                   ),
                 ),

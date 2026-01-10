@@ -161,11 +161,7 @@ class EditProfile extends StatelessWidget {
                           // Phone number with country code picker
                           _buildPhoneNumberField(controller, context),
                           SizedBox(height: 12),
-                          EditPersonal(
-                            title: AppString.location_text,
-                            controller:
-                            controller.primaryLocationController,
-                          ),
+                          _buildLocationField(controller),
                           SizedBox(height: 20.h),
                           controller.isLoading
                               ? Center(
@@ -286,65 +282,152 @@ class EditProfile extends StatelessWidget {
       ],
     );
   }
+  // Replace the EditPersonal widget for location with this:
 
-  Widget _buildLocationDropdown(EditProfileController controller) {
+  Widget _buildLocationField(EditProfileController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CommonText(
           text: AppString.location_text,
           fontSize: 14.sp,
+          textAlign: TextAlign.left,
           fontWeight: FontWeight.w400,
           color: AppColors.black400,
         ),
-        SizedBox(height: 12),
-        Container(
-          width: double.infinity,
-          height: 44,
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.black100, width: 1),
-            borderRadius: BorderRadius.circular(4.r),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: Obx(
-                  () => DropdownButton<String>(
-                value: controller.selectedLocation.value.isEmpty
-                    ? null
-                    : controller.selectedLocation.value,
-                hint: CommonText(
-                  text: AppString.selectLocation,
-                  fontSize: 12,
-                  color: AppColors.black200,
-                  textAlign: TextAlign.left,
-                ),
-                icon: Icon(
-                  Icons.keyboard_arrow_down,
-                  color: AppColors.black300,
-                  size: 24.sp,
-                ),
-                isExpanded: true,
-                items: controller.locations.map((String location) {
-                  return DropdownMenuItem<String>(
-                    value: location,
-                    child: CommonText(
-                      text: location,
-                      fontSize: 14,
-                      color: AppColors.black400,
-                      textAlign: TextAlign.left,
+        SizedBox(height: 6),
+
+        GetBuilder<EditProfileController>(
+          builder: (ctrl) {
+            return Column(
+              children: [
+                // Location Text Field
+                CommonTextField(
+                  controller: ctrl.primaryLocationController,
+                  maxLines: 2,
+                  hintTextColor: AppColors.black400,
+                  onChanged: ctrl.onLocationChanged,
+                  suffixIcon: ctrl.isLocationLoading
+                      ? Padding(
+                    padding: EdgeInsets.all(12.w),
+                    child: SizedBox(
+                      height: 20.h,
+                      width: 20.w,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.primaryColor,
+                      ),
                     ),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  controller.setSelectedLocation(newValue ?? '');
-                },
-              ),
-            ),
-          ),
+                  )
+                      : ctrl.primaryLocationController.text.isNotEmpty
+                      ? IconButton(
+                    icon: Icon(
+                      Icons.clear,
+                      color: AppColors.black300,
+                      size: 20.sp,
+                    ),
+                    onPressed: () {
+                      ctrl.primaryLocationController.clear();
+                      ctrl.clearLocationSuggestions();
+                    },
+                  )
+                      : null,
+                ),
+
+                // Location Suggestions Dropdown
+                if (ctrl.locationSuggestions.isNotEmpty)
+                  Container(
+                    margin: EdgeInsets.only(top: 8.h),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      border: Border.all(color: AppColors.black100),
+                      borderRadius: BorderRadius.circular(4.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    constraints: BoxConstraints(
+                      maxHeight: 200.h,
+                    ),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      itemCount: ctrl.locationSuggestions.length,
+                      separatorBuilder: (context, index) => Divider(
+                        height: 1,
+                        color: AppColors.black100,
+                      ),
+                      itemBuilder: (context, index) {
+                        final location = ctrl.locationSuggestions[index];
+                        return InkWell(
+                          onTap: () {
+                            ctrl.selectLocation(location);
+                            FocusScope.of(context).unfocus();
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 12.h,
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  color: AppColors.primaryColor,
+                                  size: 20.sp,
+                                ),
+                                SizedBox(width: 12.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      CommonText(
+                                        text: location.shortName,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.black400,
+                                        textAlign: TextAlign.left,
+                                        maxLines: 1,
+                                      ),
+                                      if (location.displayName != location.shortName)
+                                        CommonText(
+                                          text: location.displayName,
+                                          fontSize: 12,
+                                          color: AppColors.black200,
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            );
+          },
         ),
       ],
     );
   }
+
+
+// Then in your build method, replace this line:
+// EditPersonal(
+//   title: AppString.location_text,
+//   controller: controller.primaryLocationController,
+// ),
+
+// With:
+// _buildLocationField(controller),
 }
 
 class EditPersonal extends StatelessWidget {
@@ -371,6 +454,7 @@ class EditPersonal extends StatelessWidget {
         SizedBox(height: 6),
         CommonTextField(
           controller: controller,
+          maxLines: 1,
           hintTextColor: AppColors.black400,
         )
       ],

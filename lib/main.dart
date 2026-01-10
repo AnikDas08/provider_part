@@ -4,7 +4,7 @@ import 'package:haircutmen_user_app/utils/extensions/extension.dart';
 
 import 'app.dart';
 import 'config/dependency/dependency_injection.dart';
-import 'main.dart' as GetStorage;
+import 'package:get_storage/get_storage.dart';
 import 'services/notification/notification_service.dart';
 import 'services/socket/socket_service.dart';
 import 'services/storage/storage_services.dart';

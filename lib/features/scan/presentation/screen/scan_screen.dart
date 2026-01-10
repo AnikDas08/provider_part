@@ -102,14 +102,12 @@ class QRScannerScreen extends StatelessWidget {
                         },
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        AppString.scan,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      const CommonText(
+                          text: AppString.scan,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      )
                     ],
                   ),
                 ),
@@ -161,7 +159,7 @@ class QRScannerScreen extends StatelessWidget {
                     color: AppColors.primaryColor,
                   ),
                   decoration: InputDecoration(
-                    hintText: AppString.userId,
+                    hintText: AppString.userId.tr,
                     hintStyle: TextStyle(
                       fontSize: 16.sp,
                       color: AppColors.red100,

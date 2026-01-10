@@ -429,16 +429,16 @@ class OverviewController extends GetxController {
 
       // If both are empty, show "Select Schedule"
       if (start.isEmpty && end.isEmpty) {
-        return "Select Schedule";
+        return AppString.select_schedule.tr;
       }
       // If one is empty, still show "Select Schedule"
       if (start.isEmpty || end.isEmpty) {
-        return "Select Schedule";
+        return AppString.select_schedule.tr;
       }
       // Both are filled, show the time range
       return "$start - $end";
     }
-    return "Select Schedule";
+    return AppString.select_schedule.tr;
   }
 
   // Get start time for a specific day
@@ -449,7 +449,7 @@ class OverviewController extends GetxController {
       return workingTimes[day]!['start'] ?? "07:00";
     }
     if (start=="") {
-      return "Select start time";
+      return AppString.select_start_time.tr;
     }
     return "07:00";
   }
@@ -457,12 +457,12 @@ class OverviewController extends GetxController {
   // Get end time for a specific day
   String getEndTime(String day) {
     final times = workingTimes[day]!;
-    String end = times['end'] ?? "Select Start Time";
+    String end = times['end'] ?? AppString.select_end_time.tr;
     if (workingTimes.containsKey(day)) {
       return workingTimes[day]!['end'] ?? "22:00";
     }
     if (end.isEmpty) {
-      return "Select end Time";
+      return AppString.select_end_time.tr;
     }
     return "22:00";
   }

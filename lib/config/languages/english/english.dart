@@ -261,8 +261,24 @@ Map<String, String> english = {
   AppString.qr_name: "MD Kamran khan",
   AppString.qr_id: "User ID: ",
   AppString.userId: "Type User Id",
+  AppString.image_available_now: "Image not available",
   AppString.or: "Or",
   AppString.scan: "Scan",
   AppString.pauseScan: "Scanner is paused",
   AppString.privacy_policy_texts: "Lorem ipsum dolor sit amet consectetur. Eget imperdiet ultrices adipiscing et vitae adipiscing ornare. Vel tristique lorem viverra lorem sem consequat cras dui. Nisl libero nisl nec vulputate quam quis. Orci tempor pulvinar amet mi at et ac ipsum. Sed non massa accumsan dolor venenatis eleifend. Netus semper integer purus praesent nulla porttitor nibh. Lobortis ornare feugiat dictum eu cursus a platea fermentum. Tellus dolor a sit morbi. Elementum diam tortor est erat ultricies quam sed nibh. Eros pellentesque eu est lectus. Nunc facilisi ipsum senectus dolor adipiscing id pretium consectetur. Hendrerit aliquam lectus urna at commodo ultrices volutpat pulvinar donec. In ut sagittis placerat ut in. Sit erat accumsan eget libero fringilla metus. Est venenatis commodo ut velit non aenean in pulvinar. Pretium pretium aliquet at nec ut malesuada augue sed a. Turpis vestibulum dolor leo aliquam rhoncus fermentum. Elit congue diam euismod tempus nunc bibendum. Tempus sit dis sem non dignissim.",
+
+  AppString.sat: "Sat",
+  AppString.sun: "Sun",
+  AppString.mon: "Mon",
+  AppString.tue: "Tue",
+  AppString.wed: "Wed",
+  AppString.thu: "Thu",
+  AppString.fri: "Fri",
+
+  AppString.password_show: "Give your password to confirm your account.",
+  AppString.enter_password: "Enter Your Password",
+
+
+  AppString.chat_not: "No chats found",
+  AppString.select_schedule: "Select Schedule",
 };
