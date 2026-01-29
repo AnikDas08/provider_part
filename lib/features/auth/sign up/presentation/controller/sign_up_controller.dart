@@ -278,7 +278,7 @@ class SignUpController extends GetxController {
     print("Country code 😍😍😍😍 $countryCode");
     isLoading = true;
     update();
-    Map<String, String> body = {
+    Map<String, dynamic> body = {
       "role":"PROVIDER",
       "name":nameController.text,
       "email":emailController.text,
@@ -288,6 +288,7 @@ class SignUpController extends GetxController {
       "latitude": latitude ?? "",
       "longitude": longitude ?? "",
       "password": passwordController.text,
+      "coordinates": [latitude ?? 0.0, longitude ?? 0.0],
       "referralCode":referralController.text,
     };
 

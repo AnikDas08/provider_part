@@ -29,6 +29,9 @@ class CompleteProfileScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: CustomAppBar(
                     title: AppString.complete_profile_text,
+                    onBackTap: (){
+                      Get.back();
+                    },
                   ),
                 ),
                 Expanded(

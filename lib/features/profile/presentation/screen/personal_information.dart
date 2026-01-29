@@ -136,6 +136,7 @@ class InformationRow extends StatelessWidget {
             textAlign: TextAlign.start,
             fontWeight: FontWeight.w400,
             color: AppColors.black400,
+            maxLines: 2,
           ),
         ),
         Expanded(

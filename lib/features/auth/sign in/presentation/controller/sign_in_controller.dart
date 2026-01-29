@@ -85,7 +85,7 @@ class SignInController extends GetxController {
       print("klsdjfdkfj😍😍😍😍 ${LocalStorage.userId}");
 
       if(await checkProfile()==false){
-        Get.offAllNamed(AppRoutes.complete_profile_screen);
+        Get.toNamed(AppRoutes.complete_profile_screen);
       }
       else{
         Get.offAllNamed(AppRoutes.homeNav);
