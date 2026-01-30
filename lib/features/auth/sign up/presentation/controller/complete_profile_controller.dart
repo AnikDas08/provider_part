@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:haircutmen_user_app/utils/constants/app_string.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:haircutmen_user_app/config/api/api_end_point.dart';
 import 'package:haircutmen_user_app/config/route/app_routes.dart';
 import 'package:haircutmen_user_app/services/storage/storage_services.dart';
@@ -22,11 +23,107 @@ class ServicePair {
   String? selectedSubCategoryId;
 }
 
+// Location Model
+class LocationModel {
+  final String displayName;
+  final String lat;
+  final String lon;
+  final String shortName;
+  final String searchableName;
+
+  LocationModel({
+    required this.displayName,
+    required this.lat,
+    required this.lon,
+    required this.shortName,
+    required this.searchableName,
+  });
+
+  factory LocationModel.fromJson(Map<String, dynamic> json) {
+    final Map<String, dynamic> address = json['address'] ?? {};
+
+    /// ---------- SHORT NAME (Most specific place) ----------
+    String shortName =
+        address['neighbourhood'] ??
+            address['suburb'] ??
+            address['quarter'] ??
+            address['residential'] ??
+            address['hamlet'] ??
+            address['road'] ??
+            address['city'] ??
+            address['town'] ??
+            address['village'] ??
+            address['municipality'] ??
+            address['district'] ??
+            address['state'] ??
+            address['country'] ??
+            '';
+
+    // fallback: display_name first part
+    if (shortName.isEmpty && json['display_name'] != null) {
+      shortName = json['display_name']
+          .toString()
+          .split(',')
+          .first
+          .trim();
+    }
+
+    /// ---------- SEARCHABLE NAME (For search & UI) ----------
+    List<String> nameParts = [];
+
+    void addIfExists(String key) {
+      if (address[key] != null && address[key].toString().isNotEmpty) {
+        nameParts.add(address[key].toString());
+      }
+    }
+
+    addIfExists('neighbourhood');
+    addIfExists('suburb');
+    addIfExists('quarter');
+    addIfExists('road');
+    addIfExists('city');
+    addIfExists('town');
+    addIfExists('village');
+    addIfExists('municipality');
+    addIfExists('district');
+    addIfExists('state');
+
+    String searchableName;
+
+    if (nameParts.isNotEmpty) {
+      searchableName = nameParts.join(', ');
+    } else if (json['display_name'] != null) {
+      searchableName = json['display_name']
+          .toString()
+          .split(',')
+          .take(3)
+          .map((e) => e.trim())
+          .join(', ');
+    } else {
+      searchableName = '';
+    }
+
+    return LocationModel(
+      displayName: json['display_name'] ?? '',
+      lat: json['lat']?.toString() ?? '',
+      lon: json['lon']?.toString() ?? '',
+      shortName: shortName,
+      searchableName: searchableName,
+    );
+  }
+}
+
+
 class CompleteProfileController extends GetxController {
   // Controllers
   TextEditingController aboutMeController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController pricePerHourController = TextEditingController();
+
+  // Location Autocomplete
+  List<LocationModel> locationSuggestions = [];
+  bool isLocationLoading = false;
+  Timer? _debounce;
 
   // Observables
   var profileImage = Rxn<File>();
@@ -43,19 +140,96 @@ class CompleteProfileController extends GetxController {
   var isUploadingImage = false.obs;
   var isSubmitting = false.obs;
 
-  // Location
+  // Location (now populated from autocomplete selection)
   double latitude = 0.0;
   double longitude = 0.0;
 
   // Static Data
-  final languages = [AppString.english_language,AppString.russian_language,AppString.serbian_language,AppString.german_language,AppString.spanish_language,AppString.portugue_language];
+  final languages = [
+    AppString.english_language,
+    AppString.russian_language,
+    AppString.serbian_language,
+    AppString.german_language,
+    AppString.spanish_language,
+    AppString.portugue_language
+  ];
 
   @override
   void onInit() {
     super.onInit();
     addService();
-    requestPermissionsAndFetchLocation();
     fetchCategories();
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  // ----------------- Location Autocomplete -----------------
+  void onLocationChanged(String value) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      searchLocation(value);
+    });
+  }
+
+  Future<void> searchLocation(String query) async {
+    if (query.isEmpty) {
+      locationSuggestions.clear();
+      update();
+      return;
+    }
+
+    isLocationLoading = true;
+    update();
+
+    final url = Uri.parse(
+      'https://nominatim.openstreetmap.org/search'
+          '?q=${Uri.encodeComponent(query)}&format=json&addressdetails=1&limit=5',
+    );
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {"User-Agent": "HaircutMenApp"},
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint("RAW LOCATION RESPONSE 👉 ${response.body}");
+
+        final List data = jsonDecode(response.body);
+
+        debugPrint("PARSED LIST LENGTH 👉 ${data.length}");
+
+        locationSuggestions = data.map((e) => LocationModel.fromJson(e)).toList();
+      } else {
+        locationSuggestions.clear();
+      }
+    } catch (e) {
+      debugPrint("Error searching location: $e");
+      locationSuggestions.clear();
+    }
+
+    isLocationLoading = false;
+    update();
+  }
+
+  void selectLocation(LocationModel location) {
+    latitude = double.parse(location.lat);
+    longitude = double.parse(location.lon);
+    locationController.text = location.searchableName;
+    locationSuggestions.clear();
+
+
+    print("Location selected - Lat: $latitude, Lon: $longitude");
+    update();
+  }
+
+  void clearLocationSuggestions() {
+    locationSuggestions.clear();
+    update();
   }
 
   // ----------------- API Calls -----------------
@@ -75,7 +249,6 @@ class CompleteProfileController extends GetxController {
       }
     } catch (e) {
       print("Error fetching categories: $e");
-      //Get.snackbar("Error", "Failed to load categories");
     }
   }
 
@@ -111,11 +284,9 @@ class CompleteProfileController extends GetxController {
         }
       } else {
         print("Failed to fetch subcategories. Status: ${response.statusCode}");
-        //Get.snackbar("Error", "Failed to load subcategories");
       }
     } catch (e) {
       print("Error fetching subcategories: $e");
-      //Get.snackbar("Error", "Failed to load subcategories: $e");
       subCategoriesMap[categoryId] = [];
       subCategoriesMap.refresh();
     } finally {
@@ -150,57 +321,6 @@ class CompleteProfileController extends GetxController {
 
   bool isSubCategoriesLoading(String categoryId) {
     return isLoadingSubCategories[categoryId] ?? false;
-  }
-
-  // ----------------- Permissions & Location -----------------
-  Future<void> requestPermissionsAndFetchLocation() async {
-    await _requestLocationPermission();
-    await getCurrentLocation();
-  }
-
-  Future<void> _requestLocationPermission() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      //Get.snackbar("Error", "Location services are disabled");
-      return;
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        Get.snackbar("Error", "Location permission denied");
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      /*Get.snackbar(
-        "Error",
-        "Location permissions are permanently denied, cannot fetch location.",
-      );*/
-      return;
-    }
-  }
-
-  Future<void> getCurrentLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-
-      latitude = position.latitude;
-      longitude = position.longitude;
-
-      print("Location fetched - Lat: $latitude, Long: $longitude");
-      update();
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Failed to get location: $e",
-        backgroundColor: Colors.red[100],
-      );
-    }
   }
 
   // ----------------- Service Management -----------------
@@ -259,7 +379,6 @@ class CompleteProfileController extends GetxController {
     try {
       final picked = await ImagePicker().pickMultiImage();
       if (picked.isNotEmpty) {
-        // Check if adding these images would exceed the limit
         int remainingSlots = 10 - uploadedImages.length;
 
         if (picked.length > remainingSlots) {
@@ -270,7 +389,6 @@ class CompleteProfileController extends GetxController {
           );
         }
 
-        // Add only the allowed number of images
         int imagesToAdd = picked.length > remainingSlots ? remainingSlots : picked.length;
         for (int i = 0; i < imagesToAdd; i++) {
           uploadedImages.add(picked[i].path);
@@ -329,10 +447,10 @@ class CompleteProfileController extends GetxController {
       return false;
     }
     if (latitude == 0.0 || longitude == 0.0) {
-      /*Get.snackbar(
-        "Error",
-        "Location coordinates not available. Please enable GPS.",
-      );*/
+      Get.snackbar(
+        AppString.error,
+        "Please select a location from the suggestions",
+      );
       return false;
     }
     if (!isPrivacyAccepted.value) {
@@ -414,17 +532,15 @@ class CompleteProfileController extends GetxController {
         File imageFile = File(imagePath);
 
         if (await imageFile.exists()) {
-          // Get MIME type
           String? mimeType = lookupMimeType(imagePath);
           String contentType = mimeType ?? 'image/jpeg';
           List<String> mimeTypeParts = contentType.split('/');
 
           print("Adding image ${i + 1}: $imagePath (MIME: $contentType)");
 
-          // Add image to FormData with the field name "serviceImages"
           formData.files.add(
             MapEntry(
-              "serviceImages",  // Field name must match backend expectation
+              "serviceImages",
               await MultipartFile.fromFile(
                 imagePath,
                 filename: imageFile.path.split('/').last,
@@ -469,10 +585,8 @@ class CompleteProfileController extends GetxController {
 
         if (response.data.containsKey('message')) {
           errorMessage = response.data['message'];
-        } else if (response.data is String) {
-          //errorMessage = response.data;
         }
-      
+
         Get.snackbar(
           AppString.error,
           errorMessage,
@@ -492,7 +606,6 @@ class CompleteProfileController extends GetxController {
     }
   }
 
-  // Custom method to handle FormData with multiple images
   Future<ApiResponseModel> _makeMultipartRequest(
       String url,
       FormData formData,
@@ -500,7 +613,6 @@ class CompleteProfileController extends GetxController {
       ) async {
     try {
       Dio dio = Dio();
-      // Configure Dio
       dio.options.baseUrl = ApiEndPoint.baseUrl;
       dio.options.connectTimeout = const Duration(seconds: 60);
       dio.options.receiveTimeout = const Duration(seconds: 60);

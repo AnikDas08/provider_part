@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,11 +8,143 @@ import 'package:haircutmen_user_app/services/storage/storage_services.dart';
 import 'package:haircutmen_user_app/utils/helpers/other_helper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../../config/api/api_end_point.dart';
 import '../../../../services/api/api_service.dart';
 import '../../../../utils/app_utils.dart';
 import '../../data/profile_model.dart';
+
+// Location Model
+class LocationModel {
+  final String placeId;
+  final String displayName;
+  final String lat;
+  final String lon;
+
+  // Address fields (OSM)
+  final String houseNumber;
+  final String road;
+  final String neighbourhood;
+  final String suburb;
+  final String city;
+  final String town;
+  final String village;
+  final String county;
+  final String state;
+  final String postcode;
+  final String country;
+  final String countryCode;
+
+  // Computed fields
+  final String shortName;
+  final String searchableName;
+  final String fullAddress;
+
+  LocationModel({
+    required this.placeId,
+    required this.displayName,
+    required this.lat,
+    required this.lon,
+    required this.houseNumber,
+    required this.road,
+    required this.neighbourhood,
+    required this.suburb,
+    required this.city,
+    required this.town,
+    required this.village,
+    required this.county,
+    required this.state,
+    required this.postcode,
+    required this.country,
+    required this.countryCode,
+    required this.shortName,
+    required this.searchableName,
+    required this.fullAddress,
+  });
+
+  factory LocationModel.fromJson(Map<String, dynamic> json) {
+    final address = json['address'] ?? {};
+
+    String getValue(String key) =>
+        address[key]?.toString() ?? '';
+
+    /// -------- Short Name (Most specific) --------
+    String shortName =
+    getValue('neighbourhood').isNotEmpty
+        ? getValue('neighbourhood')
+        : getValue('suburb').isNotEmpty
+        ? getValue('suburb')
+        : getValue('road').isNotEmpty
+        ? getValue('road')
+        : getValue('city').isNotEmpty
+        ? getValue('city')
+        : getValue('town').isNotEmpty
+        ? getValue('town')
+        : getValue('village').isNotEmpty
+        ? getValue('village')
+        : getValue('state');
+
+    /// -------- Searchable Name --------
+    List<String> searchParts = [];
+    if (getValue('neighbourhood').isNotEmpty) {
+      searchParts.add(getValue('neighbourhood'));
+    }
+    if (getValue('road').isNotEmpty) {
+      searchParts.add(getValue('road'));
+    }
+    if (getValue('city').isNotEmpty) {
+      searchParts.add(getValue('city'));
+    } else if (getValue('town').isNotEmpty) {
+      searchParts.add(getValue('town'));
+    }
+
+    String searchableName = searchParts.isNotEmpty
+        ? searchParts.join(', ')
+        : json['display_name'];
+
+    /// -------- Full Address (Manual structured) --------
+    List<String> fullParts = [
+      getValue('house_number'),
+      getValue('road'),
+      getValue('neighbourhood'),
+      getValue('suburb'),
+      getValue('city'),
+      getValue('town'),
+      getValue('village'),
+      getValue('county'),
+      getValue('state'),
+      getValue('postcode'),
+      getValue('country'),
+    ].where((e) => e.isNotEmpty).toList();
+
+    String fullAddress = fullParts.join(', ');
+
+    return LocationModel(
+      placeId: json['place_id'].toString(),
+      displayName: json['display_name'] ?? '',
+      lat: json['lat'] ?? '',
+      lon: json['lon'] ?? '',
+
+      houseNumber: getValue('house_number'),
+      road: getValue('road'),
+      neighbourhood: getValue('neighbourhood'),
+      suburb: getValue('suburb'),
+      city: getValue('city'),
+      town: getValue('town'),
+      village: getValue('village'),
+      county: getValue('county'),
+      state: getValue('state'),
+      postcode: getValue('postcode'),
+      country: getValue('country'),
+      countryCode: getValue('country_code'),
+
+      shortName: shortName,
+      searchableName: searchableName,
+      fullAddress: fullAddress,
+    );
+  }
+}
 
 class EditProfileController extends GetxController {
   /// Language List here
@@ -31,11 +165,18 @@ class EditProfileController extends GetxController {
   bool isProfileLoading = false;
   ProfileData? profileData;
 
+  // Location Autocomplete
+  List<LocationModel> locationSuggestions = [];
+  bool isLocationLoading = false;
+  Timer? _debounce;
+  double latitude = 0.0;
+  double longitude = 0.0;
+
   // Country code with observable
-  var countryCode = "+880".obs; // Default to Bangladesh
+  var countryCode = "+880".obs;
   var countryDialCode = "+880";
-  var countryFlag = "🇧🇩".obs; // Default Bangladesh flag
-  var countryIsoCode = "BD".obs; // Default country ISO code
+  var countryFlag = "🇧🇩".obs;
+  var countryIsoCode = "BD".obs;
   var fullNumber = "";
 
   /// all controller here
@@ -50,29 +191,81 @@ class EditProfileController extends GetxController {
 
   var selectedLocation = ''.obs;
 
-  List<String> locations = [
-    'New York',
-    'Los Angeles',
-    'Chicago',
-    'Houston',
-    'Phoenix',
-    'Philadelphia',
-    'San Antonio',
-    'San Diego',
-    'Dallas',
-    'San Jose',
-    'Austin',
-    'Jacksonville',
-    'Fort Worth',
-    'Columbus',
-    'Charlotte',
-    'San Francisco',
-    'Indianapolis',
-    'Seattle',
-    'Denver',
-    'Boston',
-    // Add more locations as needed
-  ];
+  @override
+  void onInit() {
+    super.onInit();
+    getProfile();
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  // ----------------- Location Autocomplete -----------------
+  void onLocationChanged(String value) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      searchLocation(value);
+    });
+  }
+
+  Future<void> searchLocation(String query) async {
+    if (query.isEmpty) {
+      locationSuggestions.clear();
+      update();
+      return;
+    }
+
+    isLocationLoading = true;
+    update();
+
+    final url = Uri.parse(
+      'https://nominatim.openstreetmap.org/search'
+          '?q=${Uri.encodeComponent(query)}&format=json&addressdetails=1&limit=5',
+    );
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {"User-Agent": "HaircutMenApp"},
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint("RAW LOCATION RESPONSE 👉 ${response.body}");
+
+        final List data = jsonDecode(response.body);
+
+        debugPrint("PARSED LIST LENGTH 👉 ${data.length}");
+
+        locationSuggestions = data.map((e) => LocationModel.fromJson(e)).toList();
+      } else {
+        locationSuggestions.clear();
+      }
+    } catch (e) {
+      debugPrint("Error searching location: $e");
+      locationSuggestions.clear();
+    }
+
+    isLocationLoading = false;
+    update();
+  }
+
+  void selectLocation(LocationModel location) {
+    primaryLocationController.text = location.displayName;
+    latitude = double.parse(location.lat);
+    longitude = double.parse(location.lon);
+    locationSuggestions.clear();
+
+    print("Location selected - Lat: $latitude, Lon: $longitude");
+    update();
+  }
+
+  void clearLocationSuggestions() {
+    locationSuggestions.clear();
+    update();
+  }
 
   void setSelectedLocation(String location) {
     selectedLocation.value = location;
@@ -116,12 +309,6 @@ class EditProfileController extends GetxController {
         updateCountry(country);
       },
     );
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    getProfile();
   }
 
   /// select image function here
@@ -183,7 +370,6 @@ class EditProfileController extends GetxController {
 
   Future<void> handleImageUpload() async {
     try {
-      // Show bottom sheet for image source selection
       await _showImageSourceBottomSheet();
     } catch (e) {
       Get.snackbar(
@@ -325,16 +511,19 @@ class EditProfileController extends GetxController {
     update();
 
     try {
-      // Combine country code with phone number
       fullNumber = countryDialCode + numberController.text.trim();
 
-      // Prepare body
-      Map<String, String> body = {
+      Map<String, dynamic> body = {
         "name": nameController.text.trim(),
         "contact": numberController.text.trim(),
         "countryCode": countryDialCode,
         "location": primaryLocationController.text.trim(),
       };
+
+      if (latitude != null && longitude != null) {
+        body["coordinates"] = longitude;
+        body["coordinates"] = latitude;
+      }
 
       String? imagePath = profileImage.value?.path;
 
@@ -342,7 +531,7 @@ class EditProfileController extends GetxController {
         ApiEndPoint.user,
         header: {"Authorization": "Bearer $token"},
         body: body,
-        method: "PATCH", // since you want to update
+        method: "PATCH",
         imageName: "image",
         imagePath: imagePath,
       );

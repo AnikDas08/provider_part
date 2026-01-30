@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:haircutmen_user_app/config/route/app_routes.dart';
 import 'package:haircutmen_user_app/features/profile/data/provider_model.dart';
 import 'package:haircutmen_user_app/services/api/api_service.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:mime/mime.dart';
@@ -32,6 +35,47 @@ class ServicePair {
   }
 }
 
+class LocationModel {
+  final String displayName;
+  final String lat;
+  final String lon;
+  final String shortName;
+
+  LocationModel({
+    required this.displayName,
+    required this.lat,
+    required this.lon,
+    required this.shortName,
+  });
+
+  factory LocationModel.fromJson(Map<String, dynamic> json) {
+    final address = json['address'] ?? {};
+
+    // Get the most specific location available
+    String shortName = address['suburb'] ??
+        address['neighbourhood'] ??
+        address['road'] ??
+        address['city'] ??
+        address['town'] ??
+        address['village'] ??
+        address['state'] ??
+        '';
+
+    // If shortName is empty, fallback to first part of display_name
+    if (shortName.isEmpty) {
+      List<String> parts = (json['display_name'] as String).split(',');
+      shortName = parts.first.trim();
+    }
+
+    return LocationModel(
+      displayName: json['display_name'],
+      lat: json['lat'],
+      lon: json['lon'],
+      shortName: shortName,
+    );
+  }
+}
+
 class EditServiceController extends GetxController {
   // Text Controllers
   final TextEditingController aboutMeController = TextEditingController();
@@ -56,6 +100,10 @@ class EditServiceController extends GetxController {
   RxList<ServicePair> servicePairs = <ServicePair>[].obs;
   RxList<String> selectedLanguages = <String>[].obs;
   RxBool isInitializing = true.obs;
+
+  List<LocationModel> locationSuggestions = [];
+  bool isLocationLoading = false;
+
 
   // API Data - Changed to use Map format like complete profile controller
   var categories = <Map<String, dynamic>>[].obs;
@@ -185,10 +233,76 @@ class EditServiceController extends GetxController {
     locationController.dispose();
     priceController.dispose();
     pricePerHourController.dispose();
+    _debounceLocation?.cancel();
     for (var pair in servicePairs) {
       pair.dispose();
     }
     super.onClose();
+  }
+
+  Timer? _debounceLocation;
+
+  void onLocationChanged(String value) {
+    _debounceLocation?.cancel();
+    _debounceLocation = Timer(const Duration(milliseconds: 500), () {
+      searchLocation(value);
+    });
+  }
+
+  Future<void> searchLocation(String query) async {
+    if (query.isEmpty) {
+      locationSuggestions.clear();
+      update();
+      return;
+    }
+
+    isLocationLoading = true;
+    update();
+
+    final url = Uri.parse(
+      'https://nominatim.openstreetmap.org/search'
+          '?q=${Uri.encodeComponent(query)}&format=json&addressdetails=1&limit=5',
+    );
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {"User-Agent": "HaircutMenApp"},
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint("RAW LOCATION RESPONSE 👉 ${response.body}");
+
+        final List data = jsonDecode(response.body);
+
+        debugPrint("PARSED LIST LENGTH 👉 ${data.length}");
+
+        locationSuggestions = data.map((e) => LocationModel.fromJson(e)).toList();
+      } else {
+        locationSuggestions.clear();
+      }
+    } catch (e) {
+      debugPrint("Error searching location: $e");
+      locationSuggestions.clear();
+    }
+
+    isLocationLoading = false;
+    update();
+  }
+
+  void selectLocation(LocationModel location) {
+    locationController.text = location.displayName;
+    latitude = double.parse(location.lat);
+    longitude = double.parse(location.lon);
+    locationSuggestions.clear();
+
+    print("Location selected - Lat: $latitude, Lon: $longitude");
+    update();
+  }
+
+  void clearLocationSuggestions() {
+    locationSuggestions.clear();
+    update();
   }
 
   void togglePrivacyAcceptance() {

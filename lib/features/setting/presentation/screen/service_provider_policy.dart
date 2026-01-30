@@ -14,7 +14,8 @@ class ServiceProviderPolicy extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 50,
-        title: Text(AppString.service_provider_policy.tr),
+
+        title: Text(AppString.service_provider_policy.tr,selectionColor: AppColors.primaryColor,),
         leading: GestureDetector(
           onTap: () => Get.back(), // 👈 Default is Get.back()
           child: Container(

@@ -70,7 +70,7 @@ class SignUpScreen extends StatelessWidget {
                           SizedBox(height: 20,),
             
                           /// All Text Filed here
-                          SignUpAllField(controller: controller),
+                          SignUpAllFiled(controller: controller),
             
                           16.height,
             

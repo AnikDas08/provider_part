@@ -156,6 +156,7 @@ class CanceldetailsScreen extends StatelessWidget {
                             SizedBox(height: 6.h),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SvgPicture.asset(
                                   "assets/icons/location_icon.svg",
@@ -164,12 +165,15 @@ class CanceldetailsScreen extends StatelessWidget {
                                   color: AppColors.black300,
                                 ),
                                 SizedBox(width: 4.w),
-                                CommonText(
-                                  text: controller.userLocation.value,
-                                  fontSize: 12.sp,
-                                  color: AppColors.black300,
-                                  fontWeight: FontWeight.w400,
-                                  maxLines: 2,
+                                Flexible(
+                                  child: CommonText(
+                                    text: controller.userLocation.value,
+                                    fontSize: 12.sp,
+                                    textAlign: TextAlign.start,
+                                    color: AppColors.black300,
+                                    fontWeight: FontWeight.w400,
+                                    maxLines: 3,
+                                  ),
                                 ),
                               ],
                             ),
