@@ -1,7 +1,7 @@
 class ApiEndPoint {
-  static const baseUrl = "http://72.61.159.185:5000/api/v1/";
-  static const imageUrl = "http://72.61.159.185:5000";
-  static const socketUrl = "http://72.61.159.185:5000";
+  static const baseUrl = "https://www.velodora.com/api/v1/";
+  static const imageUrl = "https://www.velodora.com";
+  static const socketUrl = "https://www.velodora.com";
 
   static const signUp = "user/user";
   static const verifyEmail = "users/verify-email";
