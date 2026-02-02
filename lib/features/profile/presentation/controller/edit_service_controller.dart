@@ -28,6 +28,9 @@ class ServicePair {
   String? categoryId;
   String? subCategoryId;
 
+  // Track if this service has been modified
+  bool isModified = false;
+
   void dispose() {
     serviceController.dispose();
     serviceTypeController.dispose();
@@ -51,7 +54,6 @@ class LocationModel {
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     final address = json['address'] ?? {};
 
-    // Get the most specific location available
     String shortName = address['suburb'] ??
         address['neighbourhood'] ??
         address['road'] ??
@@ -61,7 +63,6 @@ class LocationModel {
         address['state'] ??
         '';
 
-    // If shortName is empty, fallback to first part of display_name
     if (shortName.isEmpty) {
       List<String> parts = (json['display_name'] as String).split(',');
       shortName = parts.first.trim();
@@ -103,8 +104,7 @@ class EditServiceController extends GetxController {
   List<LocationModel> locationSuggestions = [];
   bool isLocationLoading = false;
 
-
-  // API Data - Changed to use Map format like complete profile controller
+  // API Data
   var categories = <Map<String, dynamic>>[].obs;
   var subCategoriesMap = <String, List<Map<String, dynamic>>>{}.obs;
   var isLoadingSubCategories = <String, bool>{}.obs;
@@ -132,7 +132,6 @@ class EditServiceController extends GetxController {
 
   // Get service types for a specific service
   List<String> getServiceTypes(String serviceName) {
-    // Find the category
     final category = categories.firstWhereOrNull(
           (cat) => cat['name'] == serviceName,
     );
@@ -185,9 +184,23 @@ class EditServiceController extends GetxController {
 
   void removeService(int index) {
     if (servicePairs.length > 1) {
-      servicePairs[index].dispose();
+      final pair = servicePairs[index];
+
+      print("=== Removing Service at Index $index ===");
+      print("Service ID: ${pair.serviceId}");
+      print("Service Name: ${pair.serviceController.text}");
+
+      pair.dispose();
       servicePairs.removeAt(index);
+
+      print("Remaining services: ${servicePairs.length}");
       update();
+    } else {
+      Get.snackbar(
+        "Cannot Delete",
+        "You must have at least one service",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
@@ -197,25 +210,19 @@ class EditServiceController extends GetxController {
     _initializeScreen();
   }
 
-  // NEW: Sequential initialization with error handling
   Future<void> _initializeScreen() async {
     try {
       isInitializing.value = true;
 
-      // Get location in background (non-blocking)
       getCurrentLocation().catchError((error) {
         print("Location error: $error");
       });
 
-      // Fetch categories FIRST (with timeout)
       await fetchCategories().timeout(Duration(seconds: 15));
-
-      // Then fetch provider data
       await getProviderInformation().timeout(Duration(seconds: 15));
 
       isLoading.value = false;
     } catch (e) {
-      // Show error and provide fallback
       Get.snackbar("Error", "Failed to load data");
       if (servicePairs.isEmpty) {
         servicePairs.add(ServicePair());
@@ -312,7 +319,6 @@ class EditServiceController extends GetxController {
     return assetImages.length + uploadedImages.length;
   }
 
-  // Fetch all categories from API
   Future<void> fetchCategories() async {
     try {
       print("Fetching all categories...");
@@ -336,7 +342,6 @@ class EditServiceController extends GetxController {
     }
   }
 
-  // Fetch subcategories for a specific category
   Future<void> fetchSubCategories(String categoryId) async {
     try {
       isLoadingSubCategories[categoryId] = true;
@@ -385,7 +390,6 @@ class EditServiceController extends GetxController {
     return isLoadingSubCategories[categoryId] ?? false;
   }
 
-  // Get current location
   Future<void> getCurrentLocation() async {
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -442,11 +446,11 @@ class EditServiceController extends GetxController {
 
     for (var pair in servicePairs) {
       if (pair.serviceController == controller) {
-        // Service selected - clear service type and update category ID
+        // Mark as modified when service is changed
+        pair.isModified = true;
         pair.serviceTypeController.clear();
         pair.subCategoryId = null;
 
-        // Find category by name
         final category = categories.firstWhereOrNull(
               (cat) => cat['name'] == value,
         );
@@ -455,14 +459,14 @@ class EditServiceController extends GetxController {
           String categoryId = category['_id'] ?? category['id'] ?? '';
           pair.categoryId = categoryId;
 
-          // Fetch subcategories for this category
           if (categoryId.isNotEmpty) {
             await fetchSubCategories(categoryId);
           }
         }
         break;
       } else if (pair.serviceTypeController == controller) {
-        // Service type selected - update subcategory ID
+        // Mark as modified when service type is changed
+        pair.isModified = true;
         final categoryId = pair.categoryId;
         if (categoryId != null && categoryId.isNotEmpty) {
           final subCategories = subCategoriesMap[categoryId] ?? [];
@@ -675,7 +679,6 @@ class EditServiceController extends GetxController {
       return false;
     }
 
-    // Check for duplicate services
     Set<String> uniqueServices = {};
     for (int i = 0; i < servicePairs.length; i++) {
       var pair = servicePairs[i];
@@ -690,7 +693,6 @@ class EditServiceController extends GetxController {
         return false;
       }
 
-      // Check for duplicate service combination
       String serviceKey = "${pair.categoryId}_${pair.subCategoryId}";
       if (uniqueServices.contains(serviceKey)) {
         Get.snackbar(
@@ -740,41 +742,62 @@ class EditServiceController extends GetxController {
         return;
       }
 
+      print("\n========================================");
+      print("STARTING PROFILE UPDATE");
+      print("========================================");
+      print("Total services in form: ${servicePairs.length}");
+
       // Build new services array (services without serviceId)
       List<Map<String, dynamic>> newServices = [];
-      for (var pair in servicePairs) {
-        if (pair.serviceId == null) {
-          double? price = double.tryParse(pair.priceController.text.trim());
-          if (price != null) {
-            newServices.add({
-              "category": pair.categoryId,
-              "subCategory": pair.subCategoryId,
-              "price": price.toInt(),
-            });
-          }
-        }
-      }
 
-      // Build update services array (services with serviceId)
+      // Build update services array (services with serviceId that are modified)
       List<Map<String, dynamic>> updateServices = [];
+
+      // Build exist array (service IDs that exist but are NOT modified)
+      List<String> existServices = [];
+
       for (var pair in servicePairs) {
-        if (pair.serviceId != null) {
-          double? price = double.tryParse(pair.priceController.text.trim());
-          if (price != null) {
+        double? price = double.tryParse(pair.priceController.text.trim());
+        if (price == null) continue;
+
+        if (pair.serviceId == null || pair.serviceId!.isEmpty) {
+          // New service (no ID)
+          newServices.add({
+            "category": pair.categoryId,
+            "subCategory": pair.subCategoryId,
+            "price": price.toInt(),
+          });
+          print("✨ New service: ${pair.serviceController.text} - ${pair.serviceTypeController.text}");
+        } else {
+          // Existing service (has ID)
+          if (pair.isModified) {
+            // Service is modified - add to UPDATE array
             updateServices.add({
               "ref": pair.serviceId,
               "category": pair.categoryId,
               "subCategory": pair.subCategoryId,
               "price": price.toInt(),
             });
+            print("🔄 Updated service: ${pair.serviceController.text} - ${pair.serviceTypeController.text} (ID: ${pair.serviceId})");
+          } else {
+            // Service exists but not modified - add to EXIST array
+            existServices.add(pair.serviceId!);
+            print("✅ Existing service (unchanged): ${pair.serviceController.text} - ${pair.serviceTypeController.text} (ID: ${pair.serviceId})");
           }
         }
       }
 
-      // Build services OBJECT with new and update arrays
+      print("\n--- Service Summary ---");
+      print("New services to add: ${newServices.length}");
+      print("Existing services to update: ${updateServices.length}");
+      print("Existing services (unchanged): ${existServices.length}");
+      print("Existing IDs (unchanged): ${existServices}");
+
+      // Build services OBJECT with new, update, and exist arrays
       Map<String, dynamic> servicesObject = {
         "new": newServices,
         "update": updateServices,
+        "exist": existServices,
       };
 
       // Build data object
@@ -786,16 +809,16 @@ class EditServiceController extends GetxController {
           "type": "Point",
           "coordinates": [longitude, latitude]
         },
-        "serviceDistance": serviceDistance.value,
+        "serviceDistance": serviceDistance.value.toInt(),
         "pricePerHour": (double.tryParse(pricePerHourController.text.trim()) ?? 0).toInt(),
         "isRead": true,
       };
 
-      print("=== Edit Profile Data ===");
-      print("Data Object: ${jsonEncode(dataObject)}");
-      print("Services Object: ${jsonEncode(servicesObject)}");
-      print("Previous Service Images: ${assetImages.toList()}");
-      print("Uploaded Images Count: ${uploadedImages.length}");
+      print("\n--- Data Object ---");
+      print(jsonEncode(dataObject));
+
+      print("\n--- Services Object ---");
+      print(jsonEncode(servicesObject));
 
       // Create FormData
       FormData formData = FormData();
@@ -803,18 +826,23 @@ class EditServiceController extends GetxController {
       // Add data as JSON string
       formData.fields.add(MapEntry('data', jsonEncode(dataObject)));
 
-      // Add services as JSON OBJECT string with new and update arrays
+      // Add services as JSON OBJECT string
       String servicesJson = jsonEncode(servicesObject);
-      print("Services JSON String: $servicesJson");
       formData.fields.add(MapEntry('services', servicesJson));
+
+      print("\n--- Services JSON Being Sent ---");
+      print(servicesJson);
 
       // Add previousServiceImages as JSON array string
       if (assetImages.isNotEmpty) {
         formData.fields.add(MapEntry('previousServiceImages', jsonEncode(assetImages.toList())));
+        print("\n--- Previous Images ---");
+        print("Count: ${assetImages.length}");
       }
 
       // Add new service images as files (if any)
       if (uploadedImages.isNotEmpty) {
+        print("\n--- New Images ---");
         print("Adding ${uploadedImages.length} new service images");
         for (var imagePath in uploadedImages) {
           String fileName = imagePath.split('/').last;
@@ -833,9 +861,9 @@ class EditServiceController extends GetxController {
         }
       }
 
-      print("=== FormData Summary ===");
-      print("Fields count: ${formData.fields.length}");
-      print("Files count: ${formData.files.length}");
+      print("\n--- Making API Call ---");
+      print("Endpoint: ${ApiEndPoint.baseUrl}${ApiEndPoint.provider}");
+      print("Method: PUT");
 
       // Make API call
       final response = await _makeMultipartRequest(
@@ -844,14 +872,18 @@ class EditServiceController extends GetxController {
         {"Authorization": "Bearer $token"},
       );
 
-      print("=== API Response ===");
+      print("\n========================================");
+      print("API RESPONSE");
+      print("========================================");
       print("Status Code: ${response.statusCode}");
-      print("Response Data: ${jsonEncode(response.data)}");
+      print("Response: ${jsonEncode(response.data)}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        print("\n✅ SUCCESS - Profile updated successfully");
+
         Get.snackbar(
           "Success",
-          "Your profile has been updated and is pending approval",
+          "Your profile has been updated successfully",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.green[100],
           duration: Duration(seconds: 3),
@@ -874,17 +906,18 @@ class EditServiceController extends GetxController {
           errorMessage = data['message'].toString();
         }
 
+        print("\n❌ ERROR - ${errorMessage}");
         Utils.errorSnackBar(0, errorMessage);
       }
     } catch (e) {
-      print("Error in confirmProfile: $e");
+      print("\n❌ EXCEPTION in confirmProfile");
+      print("Error: $e");
       Utils.errorSnackBar(0, "Error: ${e.toString()}");
     } finally {
       isLoading.value = false;
     }
   }
 
-  // Custom method to handle FormData with multiple images
   Future<ApiResponseModel> _makeMultipartRequest(
       String url,
       FormData formData,
@@ -960,8 +993,6 @@ class EditServiceController extends GetxController {
         final data = response.data['data'];
         providerData.value = ProviderData.fromJson(data);
 
-        // Don't extract categories from provider data anymore
-        // We'll use all categories from the API
         populateFormWithData(providerData.value!);
 
         print("Provider Data loaded successfully");
@@ -976,6 +1007,10 @@ class EditServiceController extends GetxController {
   }
 
   void populateFormWithData(ProviderData data) {
+    print("\n========================================");
+    print("POPULATING FORM WITH PROVIDER DATA");
+    print("========================================");
+
     if (data.aboutMe != null && data.aboutMe!.isNotEmpty) {
       aboutMeController.text = data.aboutMe!;
     }
@@ -991,24 +1026,27 @@ class EditServiceController extends GetxController {
     }
 
     if (data.serviceDistance != null) {
-      serviceDistance.value = data.serviceDistance!.toDouble();
+      serviceDistance.value = data.serviceDistance!.toDouble().clamp(0.0, 100.0);
     }
 
     if (data.pricePerHour != null) {
       pricePerHourController.text = data.pricePerHour!.toString();
     }
 
+    // Clear existing services
     for (var pair in servicePairs) {
       pair.dispose();
     }
     servicePairs.clear();
 
     if (data.services != null && data.services!.isNotEmpty) {
+      print("\nLoading ${data.services!.length} existing services:");
       for (var service in data.services!) {
         ServicePair pair = ServicePair();
         pair.serviceId = service.id;
         pair.categoryId = service.category?.id;
         pair.subCategoryId = service.subCategory?.id;
+        pair.isModified = false; // Initially not modified
 
         if (service.category?.name != null) {
           pair.serviceController.text = service.category!.name!;
@@ -1022,15 +1060,22 @@ class EditServiceController extends GetxController {
           pair.priceController.text = service.price!.toString();
         }
 
+        // Add listener to detect price changes
+        pair.priceController.addListener(() {
+          pair.isModified = true;
+        });
+
         servicePairs.add(pair);
 
-        // Pre-fetch subcategories for existing services
+        print("  - ${service.category?.name ?? 'N/A'} > ${service.subCategory?.name ?? 'N/A'} (ID: ${service.id})");
+
         if (pair.categoryId != null && pair.categoryId!.isNotEmpty) {
           fetchSubCategories(pair.categoryId!);
         }
       }
     } else {
       servicePairs.add(ServicePair());
+      print("No existing services, added empty service pair");
     }
 
     assetImages.clear();
@@ -1039,7 +1084,10 @@ class EditServiceController extends GetxController {
       assetImages.addAll(data.serviceImages!);
     }
 
-    print("Form populated - Services: ${servicePairs.length}, Images: ${assetImages.length}");
+    print("\n--- Form Population Complete ---");
+    print("Services loaded: ${servicePairs.length}");
+    print("Images loaded: ${assetImages.length}");
+    print("========================================\n");
     update();
   }
 }
