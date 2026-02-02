@@ -521,8 +521,8 @@ class EditProfileController extends GetxController {
       };
 
       if (latitude != null && longitude != null) {
-        body["coordinates"] = longitude;
-        body["coordinates"] = latitude;
+        body["coordinates"] = longitude.toString();
+        body["coordinates"] = latitude.toString();
       }
 
       String? imagePath = profileImage.value?.path;

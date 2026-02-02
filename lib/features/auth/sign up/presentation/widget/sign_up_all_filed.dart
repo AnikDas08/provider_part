@@ -156,7 +156,7 @@ class _SignUpAllFieldState extends State<SignUpAllFiled> {
           ],
         ),
 
-        /// User Password here
+
         const CommonText(
           text: AppString.password_text,
           fontSize: 14,
