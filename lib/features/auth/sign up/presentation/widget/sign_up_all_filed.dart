@@ -103,7 +103,7 @@ class _SignUpAllFieldState extends State<SignUpAllFiled> {
         _buildPhoneNumberField(),
 
         /// User Location here
-        const CommonText(
+        /*const CommonText(
           text: AppString.location,
           fontSize: 14,
           fontWeight: FontWeight.w400,
@@ -154,7 +154,7 @@ class _SignUpAllFieldState extends State<SignUpAllFiled> {
                 ),
               ),
           ],
-        ),
+        ),*/
 
 
         const CommonText(

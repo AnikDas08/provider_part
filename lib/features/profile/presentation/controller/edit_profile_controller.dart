@@ -517,13 +517,13 @@ class EditProfileController extends GetxController {
         "name": nameController.text.trim(),
         "contact": numberController.text.trim(),
         "countryCode": countryDialCode,
-        "location": primaryLocationController.text.trim(),
+        //"location": primaryLocationController.text.trim(),
       };
 
-      if (latitude != null && longitude != null) {
+      /*if (latitude != null && longitude != null) {
         body["coordinates"] = longitude.toString();
         body["coordinates"] = latitude.toString();
-      }
+      }*/
 
       String? imagePath = profileImage.value?.path;
 

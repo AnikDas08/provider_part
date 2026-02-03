@@ -160,8 +160,8 @@ class EditProfile extends StatelessWidget {
                           SizedBox(height: 12),
                           // Phone number with country code picker
                           _buildPhoneNumberField(controller, context),
-                          SizedBox(height: 12),
-                          _buildLocationField(controller),
+                          /*SizedBox(height: 12),
+                          _buildLocationField(controller),*/
                           SizedBox(height: 20.h),
                           controller.isLoading
                               ? Center(

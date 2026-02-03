@@ -99,8 +99,8 @@ class ServiceProfileScreen extends StatelessWidget {
                       children: [
                         SvgPicture.asset(
                           "assets/icons/location_icon.svg",
-                          width: 24.w,
-                          height: 24.h,
+                          width: 18.w,
+                          height: 18.h,
                           color: AppColors.black400,
                         ),
                         SizedBox(width: 4.w),

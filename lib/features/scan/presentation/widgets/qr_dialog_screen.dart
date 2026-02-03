@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:haircutmen_user_app/component/text/common_text.dart';
+import 'package:haircutmen_user_app/features/scan/presentation/widgets/review_scan_bottomsheet.dart';
 import 'package:haircutmen_user_app/utils/constants/app_colors.dart';
 import 'package:haircutmen_user_app/utils/constants/app_string.dart';
 
@@ -53,7 +54,7 @@ showQrDialog() async {
                         isSelected: true,
                         onTap: (){
                           Get.back(); // Close the dialog first
-                          //showReviewBottomSheet();
+                          showReviewBottomSheet();
                         }
                     )
                 ),

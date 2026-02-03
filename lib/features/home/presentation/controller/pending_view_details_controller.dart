@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:haircutmen_user_app/config/route/app_routes.dart';
 import 'package:haircutmen_user_app/features/home/presentation/controller/home_controller.dart';
+import 'package:haircutmen_user_app/utils/constants/app_colors.dart';
 import 'package:haircutmen_user_app/utils/constants/app_string.dart';
 import '../../../../services/api/api_service.dart';
 
@@ -175,6 +176,8 @@ class PendingViewDetailsController extends GetxController {
           'Success',
           'Booking confirmed successfully',
           snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: AppColors.primaryColor,
+          colorText: AppColors.white,
         );
 
 

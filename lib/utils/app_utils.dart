@@ -9,7 +9,7 @@ class Utils {
       title,
       message,
       colorText: AppColors.white,
-      backgroundColor: AppColors.black,
+      backgroundColor: AppColors.primaryColor,
       snackPosition: SnackPosition.BOTTOM,
     );
   }

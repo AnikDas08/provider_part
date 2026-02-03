@@ -284,9 +284,9 @@ class SignUpController extends GetxController {
       "email":emailController.text,
       "contact": phoneNumberController.text,
       "countryCode":countryCode,
-      "location":locationController.text,
+      /*"location":locationController.text,
       "latitude": latitude ?? "",
-      "longitude": longitude ?? "",
+      "longitude": longitude ?? "",*/
       "password": passwordController.text,
       "coordinates": [longitude ?? 0.0, latitude ?? 0.0],
       "referralCode":referralController.text,
