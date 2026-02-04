@@ -67,6 +67,7 @@ class HomeController extends GetxController {
     getOnlineStatus();
     countNotification();
     countMessa();
+    print("💕💕💕💕💕💕💕userId: ${LocalStorage.userId}");
   }
 
   @override

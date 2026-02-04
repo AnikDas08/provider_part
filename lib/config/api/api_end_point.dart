@@ -1,5 +1,5 @@
 class ApiEndPoint {
-  static const baseUrl = "https://www.velodora.com/api/v1/";
+  static const baseUrl = "https://www.velodora.com//api/v1/";
   static const imageUrl = "https://www.velodora.com/";
   static const socketUrl = "https://www.velodora.com";
 

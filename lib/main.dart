@@ -28,10 +28,10 @@ Future<void> main() async {
 init() async {
   DependencyInjection dI = DependencyInjection();
   dI.dependencies();
-  SocketServices.connectToSocket();
 
   await Future.wait([
     LocalStorage.getAllPrefData(),
     NotificationService.initLocalNotification(),
   ]);
+  SocketServices.connectToSocket();
 }

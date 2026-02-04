@@ -15,6 +15,8 @@ class UpcomingViewDetailsController extends GetxController {
   var userName = '';
   var userImage = '';
   var userLocation = '';
+  var description = '';
+  var image = '';
   var serviceName = ''.obs;
   var date = ''.obs;
   var time = ''.obs;
@@ -43,6 +45,8 @@ class UpcomingViewDetailsController extends GetxController {
         // API returns data as a List, get the first item
         if (response.data['data'] is List && response.data['data'].isNotEmpty) {
           bookingData.value = response.data['data'][0];
+          description = response.data['data'][0]['bookingDescription'] ?? "N/A";
+          image=response.data["data"][0]["image"]??"";
           _parseBookingData();
         } else if (response.data['data'] is Map) {
           // In case API returns single object

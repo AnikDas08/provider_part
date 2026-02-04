@@ -8,9 +8,10 @@ import 'package:haircutmen_user_app/utils/constants/app_string.dart';
 
 
 import '../../../home/widget/home_custom_button.dart';
+import '../controller/scan_controller.dart';
 
 showQrDialog() async {
-  //final QRScannerController controller = Get.find<QRScannerController>();
+  final QRScannerController controller = Get.find<QRScannerController>();
   showDialog(
     context: Get.context!,
     barrierDismissible: false,
@@ -54,7 +55,7 @@ showQrDialog() async {
                         isSelected: true,
                         onTap: (){
                           Get.back(); // Close the dialog first
-                          showReviewBottomSheet();
+                          //showReviewBottomSheet();
                         }
                     )
                 ),

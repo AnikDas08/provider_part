@@ -261,6 +261,8 @@ Map<String, String> russian = {
   AppString.image_available_now: "Изображение недоступно",
   AppString.qr_details: "Пожалуйста, разрешите поставщику услуг отсканировать QR-код ниже для завершения услуги.",
   AppString.qr_name: "MD Kamran khan",
+  AppString.description_text_here: "Описание",
+  AppString.image_text_here: "Изображение",
   AppString.qr_id: "ID пользователя: ",
   AppString.userId: "Введите ID пользователя",
   AppString.or: "Или",
