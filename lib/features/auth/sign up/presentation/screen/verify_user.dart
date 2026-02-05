@@ -39,7 +39,7 @@ class _VerifyUserState extends State<VerifyUser> {
                   /// Logo text here
                   CustomAppBar(title: "",),
                   const CommonText(
-                    text: AppString.logoText,
+                    text: AppString.onboarding_text,
                     fontSize: 24,
                     color: AppColors.primaryColor,
                     fontWeight: FontWeight.w600,

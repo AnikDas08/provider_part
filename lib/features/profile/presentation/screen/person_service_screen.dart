@@ -69,6 +69,8 @@ class ServiceProfileScreen extends StatelessWidget {
         
                     // Languages
                     Obx(() => Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         CommonText(
                           text: AppString.spoken,
