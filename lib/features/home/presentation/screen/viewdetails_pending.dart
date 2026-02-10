@@ -7,6 +7,7 @@ import 'package:haircutmen_user_app/features/home/presentation/controller/pendin
 import 'package:haircutmen_user_app/utils/app_bar/custom_appbars.dart';
 import 'package:haircutmen_user_app/utils/constants/app_colors.dart';
 
+import '../../../../component/image_view/image_screen.dart';
 import '../../../../component/text/common_text.dart';
 import '../../../../utils/constants/app_string.dart';
 import '../../widget/home_custom_button.dart';
@@ -183,6 +184,32 @@ class ViewDetailsPending extends StatelessWidget {
                               color: AppColors.black400,
                               fontWeight: FontWeight.w500,
                             ),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CommonText(
+                                  text: "${AppString.description_text_here}:",
+                                  fontSize: 14.sp,
+                                  textAlign: TextAlign.start,
+                                  color: AppColors.black500,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: CommonText(
+                                    text: controller.description,
+                                    fontSize: 14.sp,
+                                    color: AppColors.black400,
+                                    maxLines: 8,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.start,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -192,6 +219,45 @@ class ViewDetailsPending extends StatelessWidget {
               ),
               SizedBox(
                 height: 10.h,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CommonText(
+                      text: "Reference Image",
+                      textAlign: TextAlign.start,
+                      fontSize: 18.sp,
+                    ),
+                    SizedBox(height: 10.h),
+                    GestureDetector(
+                      onTap: (){
+                        if (controller.image != "") {
+                          ImageViewerScreen.openSingle(
+                            Get.context!,
+                            ApiEndPoint.socketUrl + controller.image,
+                            isNetwork: true,
+                          );
+                        }
+                        else{
+                          ImageViewerScreen.openSingle(
+                              Get.context!,
+                              "assets/images/noImage.png",
+                              isNetwork: false
+                          );
+                        }
+                      },
+                      child: Image.network(
+                        ApiEndPoint.socketUrl+controller.image,
+                        width: double.infinity,
+                        height: 150.h,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/noImage.png"),
+                      ),
+                    )
+                  ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),

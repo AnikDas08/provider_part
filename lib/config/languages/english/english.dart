@@ -256,6 +256,8 @@ Map<String, String> english = {
   AppString.selectOption: "Select Option",
   AppString.selectLocation: "Select Location",
   AppString.subject: "Subject",
+  AppString.description_text_here: "Description",
+  AppString.image_text_here: "Image",
   AppString.qr_text: "QR Code",
   AppString.qr_details: "Please allow service provider to scan QR code below to complete the service.",
   AppString.qr_name: "MD Kamran khan",

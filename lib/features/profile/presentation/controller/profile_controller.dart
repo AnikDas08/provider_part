@@ -124,7 +124,8 @@ class ProfileController extends GetxController {
         var avg = response.data["data"]["averageRating"];
         var total = response.data["data"]["totalReviews"];
 
-        rating.value = (avg ?? 0).toDouble();  // ✅ null safe + convert to double
+        double rawValue = (avg ?? 0).toDouble();
+        rating.value = double.parse(rawValue.toStringAsFixed(2));
         review.value = (total ?? 0);
 
         print("rating 😍😍😍😍 ${rating.value}"); // ✅ will print now

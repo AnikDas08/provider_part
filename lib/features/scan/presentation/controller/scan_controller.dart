@@ -18,6 +18,7 @@ class QRScannerController extends GetxController {
   var scannedData = ''.obs;
   var selectedRating = 0.obs;
   var isProcessing = false.obs; // Add loading state
+  var providerId = ''.obs;
 
   TextEditingController feedbackController = TextEditingController();
   TextEditingController barController = TextEditingController();
@@ -34,14 +35,78 @@ class QRScannerController extends GetxController {
     selectedRating.value = rating;
   }
 
-  void submitFeedback() {
-    print('Rating: ${selectedRating.value}');
-    print('Feedback: ${feedbackController.text}');
+  Future<void> submitFeedback() async {
+    // Validate rating
+    if (selectedRating.value == 0) {
+      Get.snackbar(
+        AppString.error,
+        "Please select a rating",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
+      return;
+    }
 
-    Get.back();
+    // Show loading
+    Get.dialog(
+      Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
 
-    selectedRating.value = 0;
-    feedbackController.clear();
+    try {
+      final response = await ApiService.post(
+        "review",
+        body: {
+          "providerId": providerId.value,
+          "rating": selectedRating.value.toDouble(),
+          "comment": feedbackController.text.trim(),
+        },
+        header: {
+          "Authorization": "Bearer ${LocalStorage.token}",
+        },
+      );
+
+      // Close loading dialog
+      Get.back();
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Close review bottom sheet
+        Get.back();
+
+        Get.snackbar(
+          AppString.successful,
+          "Review submitted successfully",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+
+        // Clear fields
+        selectedRating.value = 0;
+        feedbackController.clear();
+      } else {
+        Get.snackbar(
+          AppString.failed,
+          "Failed to submit review",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      // Close loading dialog
+      Get.back();
+
+      print('Error submitting review: $e');
+      Get.snackbar(
+        AppString.error,
+        "Something went wrong. Please try again.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 
   Future<void> onQRViewCreated(QRViewController controller) async {
@@ -74,6 +139,9 @@ class QRScannerController extends GetxController {
 
       if (response.statusCode == 200) {
         // Only show dialog on success
+        if (response.data != null && response.data['providerId'] != null) {
+          providerId.value = response.data['providerId'];
+        }
         showSuccessDialog();
       } else {
         Get.snackbar(

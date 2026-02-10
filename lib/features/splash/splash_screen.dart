@@ -23,6 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
       String? savedLanguage = AppAuthStorage().getValue(StorageKey.language) ?? "en";
 
       print("language : $savedLanguage👌👌👌👌👌");
+      print("language : ${LocalStorage.userId}👌👌👌👌👌");
 
       if (savedLanguage != null && savedLanguage.isNotEmpty) {
         Get.updateLocale(Locale(savedLanguage));

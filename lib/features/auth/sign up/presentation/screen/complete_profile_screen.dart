@@ -577,104 +577,106 @@ class CompleteProfileScreen extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
       builder: (context) {
-        return Container(
-          padding: EdgeInsets.all(20.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40.w,
-                height: 4.h,
-                decoration: BoxDecoration(
-                  color: AppColors.black50,
-                  borderRadius: BorderRadius.circular(2.r),
-                ),
-              ),
-              SizedBox(height: 20.h),
-              CommonText(
-                text: AppString.select_language,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.black,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 8.h),
-              CommonText(
-                text: AppString.select_multiple_language,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColors.black400,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 16.h),
-              Flexible(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: controller.languages.map((language) {
-                      return Obx(() => GestureDetector(
-                        onTap: () => controller.toggleLanguageSelection(language),
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(vertical: 16.h),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: AppColors.black50,
-                                width: 0.5,
-                              ),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: CommonText(
-                                  text: language,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.black,
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
-                                Icon(
-                                  Icons.check_circle,
-                                  color: controller.isLanguageSelected(language)?AppColors.primaryColor:AppColors.black200,
-                                  size: 20.sp,
-                                ),
-                            ],
-                          ),
-                        ),
-                      ));
-                    }).toList(),
+        return SafeArea(
+          child: Container(
+            padding: EdgeInsets.all(20.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40.w,
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                    color: AppColors.black50,
+                    borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
-              ),
-              SizedBox(height: 20.h),
-              // Done button
-              Container(
-                width: double.infinity,
-                height: 48.h,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.circular(10.r),
+                SizedBox(height: 20.h),
+                CommonText(
+                  text: AppString.select_language,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.black,
+                  textAlign: TextAlign.center,
                 ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
+                SizedBox(height: 8.h),
+                CommonText(
+                  text: AppString.select_multiple_language,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.black400,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16.h),
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: controller.languages.map((language) {
+                        return Obx(() => GestureDetector(
+                          onTap: () => controller.toggleLanguageSelection(language),
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: AppColors.black50,
+                                  width: 0.5,
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: CommonText(
+                                    text: language,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColors.black,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                                  Icon(
+                                    Icons.check_circle,
+                                    color: controller.isLanguageSelected(language)?AppColors.primaryColor:AppColors.black200,
+                                    size: 20.sp,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ));
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                // Done button
+                Container(
+                  width: double.infinity,
+                  height: 48.h,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(10.r),
-                    onTap: () => Navigator.pop(context),
-                    child: Center(
-                      child: CommonText(
-                        text: AppString.done_button,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.white,
-                        textAlign: TextAlign.center,
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(10.r),
+                      onTap: () => Navigator.pop(context),
+                      child: Center(
+                        child: CommonText(
+                          text: AppString.done_button,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:haircutmen_user_app/component/text/common_text.dart';
+import 'package:haircutmen_user_app/features/scan/presentation/widgets/review_scan_bottomsheet.dart';
 import 'package:haircutmen_user_app/utils/constants/app_colors.dart';
 import 'package:haircutmen_user_app/utils/constants/app_string.dart';
 
 
 import '../../../home/widget/home_custom_button.dart';
+import '../controller/scan_controller.dart';
 
 showQrDialog() async {
-  //final QRScannerController controller = Get.find<QRScannerController>();
+  final QRScannerController controller = Get.find<QRScannerController>();
   showDialog(
     context: Get.context!,
     barrierDismissible: false,

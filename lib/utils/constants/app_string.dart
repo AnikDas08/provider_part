@@ -19,6 +19,8 @@ class AppString {
   static const String changePassword = "Change Password";
   static const String currentPassword = "Current Password";
   static const String newPassword = "New Password";
+  static const String description_text_here = "Description";
+  static const String image_text_here = "Image";
   static const String confirmPassword = "Confirm Password";
   static const String forgotPassword = "Forgot Password";
   static const String createNewPassword = "Create New Password";

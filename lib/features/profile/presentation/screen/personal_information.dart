@@ -53,15 +53,42 @@ class PersonalInformationScreen extends StatelessWidget {
                       }
                     },
                     child: Center(
-                      child: Obx(
-                        ()=> CircleAvatar(
-                          radius: 60.sp,
+                      child: Obx(() {
+                        // Check if the image path exists and isn't empty
+                        final hasImage = controller.images.value != null && controller.images.value.isNotEmpty;
+
+                        return CircleAvatar(
+                          radius: 60.r,
                           backgroundColor: Colors.transparent,
-                          backgroundImage: controller.images.value == ""
-                              ? const AssetImage("assets/images/profile_image.jpg") as ImageProvider
-                              : NetworkImage(ApiEndPoint.socketUrl + controller.images.value),
-                        ),
-                      ),
+                          child: ClipOval(
+                            child: hasImage
+                                ? Image.network(
+                              ApiEndPoint.socketUrl + controller.images.value,
+                              width: 120.r, // Use .r or .w/.h consistently
+                              height: 120.r,
+                              fit: BoxFit.cover,
+                              // Handles cases where the URL is valid but the image fails to load (404, etc.)
+                              errorBuilder: (context, error, stackTrace) => Image.asset(
+                                "assets/images/profile_image.jpg",
+                                width: 120.r,
+                                height: 120.r,
+                                fit: BoxFit.cover,
+                              ),
+                              // Optional: Adds a smooth fade-in or loader
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(child: CircularProgressIndicator(strokeWidth: 2));
+                              },
+                            )
+                                : Image.asset(
+                              "assets/images/profile_image.jpg",
+                              width: 120.r,
+                              height: 120.r,
+                              fit: BoxFit.cover,
+                            )
+                          ),
+                        );
+                      })
                       ),
                   ),
                   SizedBox(height: 26,),
@@ -88,10 +115,10 @@ class PersonalInformationScreen extends StatelessWidget {
                           SizedBox(height: 12),
                           InformationRow(title: AppString.email,value: controller.email.value,),
                           SizedBox(height: 12),
-                          InformationRow(title: AppString.contact,value: controller.fullNumber.value,),
+                          InformationRow(title: AppString.contact,value: "${controller.countrCode.value}${controller.phone.value}",),
                           SizedBox(height: 12),
-                          InformationRow(title: AppString.location,value: controller.location.value,),
-                          SizedBox(height: 12),
+                          /*InformationRow(title: AppString.location,value: controller.location.value,),
+                          SizedBox(height: 12),*/
                         ],
                       ),
                     ),

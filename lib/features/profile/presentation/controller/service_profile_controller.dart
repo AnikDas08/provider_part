@@ -10,10 +10,15 @@ class ServiceProfileController extends GetxController {
   RxString aboutMe = ''.obs;
   RxList<String> serviceLanguages = <String>[].obs;
   RxString primaryLocation = ''.obs;
+  String providerId = '';
   RxNum serviceDistance = RxNum(0);
   RxDouble pricePerHour = 0.0.obs;
   RxList<String> workPhotos = <String>[].obs;
   RxBool isLoading = true.obs;
+  final RxBool isLoadingReviews = false.obs;
+  final RxList<dynamic> review = <dynamic>[].obs;
+  final RxDouble averageRating = 0.0.obs;
+  final RxInt totalReviews = 0.obs;
 
   // Provider data
   Rx<ProviderData?> providerData = Rx<ProviderData?>(null);
@@ -47,9 +52,11 @@ class ServiceProfileController extends GetxController {
       if (response.statusCode == 200) {
         final data = response.data['data'];
         providerData.value = ProviderData.fromJson(data);
+        providerId = data['user']['_id'];
 
         // Populate all fields with API data
         populateProfileData(providerData.value!);
+        await fetchReviews();
 
         print("Service Profile Data loaded successfully");
         print("Services loaded: ${services.length}");
@@ -123,6 +130,44 @@ class ServiceProfileController extends GetxController {
     print("- Work Photos: ${workPhotos.length}");
 
     update();
+  }
+
+  Future<void> fetchReviews() async {
+    try {
+      isLoadingReviews.value = true;
+      // Get provider ID from your existing data
+      String providerId = this.providerId;
+      if (providerId.isEmpty) {
+        print("❌ Provider ID is empty");
+        return;
+      }
+      print("📡 Fetching reviews for provider: $providerId");
+      final response = await ApiService.get(
+        "review/$providerId",
+        header: {
+          "Authorization": "Bearer ${LocalStorage.token}",
+        },
+      );
+      print("📡 Reviews Response Status: ${response.statusCode}");
+      print("📦 Reviews Response Data: ${response.data}");
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        final data = response.data['data'];
+        // Set review data
+        review.value = data['reviews'] ?? [];
+        averageRating.value = double.parse((data['averageRating'] ?? 0.0).toDouble().toStringAsFixed(2));
+        totalReviews.value = data['totalReviews'] ?? 0;
+
+        print("✅ Reviews loaded successfully - Total: ${totalReviews.value}");
+        print("✅ Average Rating: ${averageRating.value}");
+        print("✅ Reviews List Length: ${review.length}");
+      } else {
+        print("⚠️ Failed to load reviews");
+      }
+    } catch (e) {
+      print("❌ Error fetching reviews: $e");
+    } finally {
+      isLoadingReviews.value = false;
+    }
   }
 
   // Get formatted languages string
