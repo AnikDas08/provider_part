@@ -51,12 +51,15 @@ class NotificationScreen extends StatelessWidget {
                       : controller.notifications.length,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    if (index > controller.notifications.length) {
-                      return CommonLoader(size: 40, strokeWidth: 2);
+                    // Fix: Use >= instead of >
+                    if (index >= controller.notifications.length) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: CommonLoader(size: 40, strokeWidth: 2),
+                      );
                     }
-                    NotificationModel item =
-                    controller.notifications[index];
 
+                    NotificationModel item = controller.notifications[index];
                     return NotificationItem(item: item);
                   },
                 );

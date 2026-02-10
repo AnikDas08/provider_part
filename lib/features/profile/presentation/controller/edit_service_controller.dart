@@ -203,9 +203,9 @@ class EditServiceController extends GetxController {
       isInitializing.value = true;
 
       // Get location in background (non-blocking)
-      getCurrentLocation().catchError((error) {
+      /*getCurrentLocation().catchError((error) {
         print("Location error: $error");
-      });
+      });*/
 
       // Fetch categories FIRST (with timeout)
       await fetchCategories().timeout(Duration(seconds: 15));

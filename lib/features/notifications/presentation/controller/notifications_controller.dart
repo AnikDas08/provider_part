@@ -39,21 +39,15 @@ class NotificationsController extends GetxController {
 
   /// Notification More data Loading function
   void moreNotification() {
-    scrollController.addListener(() async {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        if (isLoadingMore || hasNoData) return;
-        isLoadingMore = true;
-        update();
-        page++;
-        List<NotificationModel> list = await notificationRepository(page);
-        if (list.isEmpty) {
-          hasNoData = true;
-        } else {
-          notifications.addAll(list);
+    // Clear existing listeners if any to prevent duplicates
+    scrollController.removeListener(() {});
+
+    scrollController.addListener(() {
+      // Use a small buffer (e.g., 100 pixels from bottom) instead of exact maxScrollExtent
+      if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 100) {
+        if (!isLoadingMore && !hasNoData) {
+          getNotificationsRepo(); // Call the same logic to keep it DRY
         }
-        isLoadingMore = false;
-        update();
       }
     });
   }
@@ -73,20 +67,33 @@ class NotificationsController extends GetxController {
 
   /// Notification data Loading function
   getNotificationsRepo() async {
-    if (isLoading || hasNoData) return;
-    isLoading = true;
+    if (isLoadingMore || hasNoData) return;
+
+    // Distinguish between first load and pagination
+    if (notifications.isEmpty) {
+      isLoading = true;
+    } else {
+      isLoadingMore = true;
+    }
     update();
 
     page++;
-    List<NotificationModel> list = await notificationRepository(page);
-    if (list.isEmpty) {
-      hasNoData = true;
-    } else {
-      notifications.addAll(list);
+    try {
+      List<NotificationModel> list = await notificationRepository(page);
+
+      if (list.isEmpty) {
+        hasNoData = true;
+      } else {
+        // Logic to prevent duplicate items if API returns overlapping data
+        notifications.addAll(list);
+      }
+    } catch (e) {
+      print("Error fetching notifications: $e");
+    } finally {
+      isLoading = false;
+      isLoadingMore = false;
+      update();
     }
-    await readNotification();
-    isLoading = false;
-    update();
   }
 
   /// Handle notification item click

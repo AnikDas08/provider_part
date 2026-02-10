@@ -13,6 +13,10 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
+	<key>NSLocationWhenInUseUsageDescription</key>
+        <string>Velodora needs access to location to find nearby services.</string>
+        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+        <string>Velodora needs access to location to find nearby services even when the app is in the background.</string>
 	<string>haircutmen_user_app</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
