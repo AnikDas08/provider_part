@@ -384,7 +384,6 @@ class SignUpController extends GetxController {
     isLoadingVerify = false;
     update();
   }
-
   resetOpt() async {
     //Get.toNamed(AppRoutes.verifyUser);
     isLoadingWork = true;
@@ -392,9 +391,7 @@ class SignUpController extends GetxController {
     Map<String, String> body = {
       "email":emailController.text,
     };
-
     var response = await ApiService.post(ApiEndPoint.reset_otp, body: body);
-
     if (response.statusCode == 200) {
       var data = response.data;
       //signUpToken = data['data']['signUpToken'];
