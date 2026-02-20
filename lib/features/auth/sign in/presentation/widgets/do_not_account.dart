@@ -17,7 +17,7 @@ class DoNotHaveAccount extends StatelessWidget {
       TextSpan(
         children: [
           TextSpan(
-            text: AppString.have_account,
+            text: AppString.have_account.tr,
             style: GoogleFonts.plusJakartaSans(
               color: AppColors.primaryColor,
               fontSize: 14,
@@ -27,7 +27,7 @@ class DoNotHaveAccount extends StatelessWidget {
 
           /// Sign Up Button here
           TextSpan(
-            text: AppString.signup_text,
+            text: AppString.signup_text.tr,
             recognizer:
                 TapGestureRecognizer()
                   ..onTap = () {
