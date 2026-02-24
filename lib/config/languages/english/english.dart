@@ -137,7 +137,7 @@ Map<String, String> english = {
   AppString.privacy_policy_text: "Privacy Policy",
   AppString.and_text: "And",
   AppString.term_condition_text: "Terms & Condition",
-  AppString.welcome_text: "Welcome To Veldora",
+  AppString.welcome_text: "Welcome To Velodora",
   AppString.online_voew: "Online",
   AppString.view_button: "View",
   AppString.home_texts: "Home",

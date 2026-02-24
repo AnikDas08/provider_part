@@ -178,7 +178,7 @@ class AppString {
   static const String term_condition_text="Terms & Condition";
 
   /// Home Screen
-  static const String welcome_text="Welcome To Veldora";
+  static const String welcome_text="Welcome To Velodora";
   static const String online_voew="Online";
   static const String view_button="View";
   static const String home_texts="Home";

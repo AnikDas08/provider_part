@@ -523,7 +523,7 @@ class HomeController extends GetxController {
             _buildDetailRow('Date', getFormattedDate(booking)),
             _buildDetailRow('Time', getFormattedTime(booking)),
             _buildDetailRow('Booking ID', getBookingId(booking)),
-            _buildDetailRow('Price', 'BDT ${getAmount(booking)}'),
+            _buildDetailRow('Price', 'RSD ${getAmount(booking)}'),
             _buildDetailRow('Status', booking['status']?.toString() ?? 'N/A'),
           ],
         ),

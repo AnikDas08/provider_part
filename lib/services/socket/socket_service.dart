@@ -28,6 +28,7 @@ class SocketServices {
       appLog("================> get Data on socket: $data");
       NotificationService.showNotification(data);
       Get.find<HomeController>().countNotification();
+      Get.find<HomeController>().countMessa();
     });
   }
 

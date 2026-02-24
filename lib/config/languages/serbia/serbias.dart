@@ -140,7 +140,7 @@ Map<String, String> serbian = {
   AppString.privacy_policy_text: "Politika privatnosti",
   AppString.and_text: "I",
   AppString.term_condition_text: "Uslovi korišćenja",
-  AppString.welcome_text: "Dobrodošli u Veldora",
+  AppString.welcome_text: "Dobrodošli u Velodora",
   AppString.online_voew: "Online",
   AppString.view_button: "Pogledaj",
   AppString.home_texts: "Početna",

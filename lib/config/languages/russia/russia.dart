@@ -137,7 +137,7 @@ Map<String, String> russian = {
   AppString.privacy_policy_text: "Политика конфиденциальности",
   AppString.and_text: "И",
   AppString.term_condition_text: "Условия использования",
-  AppString.welcome_text: "Добро пожаловать в Veldora",
+  AppString.welcome_text: "Добро пожаловать в Velodora",
   AppString.online_voew: "Онлайн",
   AppString.view_button: "Просмотр",
   AppString.home_texts: "Главная",

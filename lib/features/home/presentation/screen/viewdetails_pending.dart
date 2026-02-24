@@ -174,7 +174,7 @@ class ViewDetailsPending extends StatelessWidget {
                                         textAlign: TextAlign.start,
                                         color: AppColors.black300,
                                         fontWeight: FontWeight.w400,
-                                        maxLines: 3,
+                                        maxLines: 4,
                                       ),
                                     ),
                                   ],

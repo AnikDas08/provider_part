@@ -22,79 +22,82 @@ class SettingScreen extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: SafeArea(
-              child: Column(
-                children: [
-              
-                  CustomAppBar(title: AppString.settings,),
-              
-                  SizedBox(height: 30.h,),
-              
-                  /// Change password Item here
-                  InkWell(
-                    onTap: () => Get.toNamed(AppRoutes.changePassword),
-                    child: const SettingItem(
-                      title: AppString.changePassword,
-                      image: "assets/icons/password_icon.svg",
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                
+                    CustomAppBar(title: AppString.settings,),
+                
+                    SizedBox(height: 30.h,),
+                
+                    /// Change password Item here
+                    InkWell(
+                      onTap: () => Get.toNamed(AppRoutes.changePassword),
+                      child: const SettingItem(
+                        title: AppString.changePassword,
+                        image: "assets/icons/password_icon.svg",
+                      ),
                     ),
-                  ),
-              
-                  /// Terms of Service Item here
-                  InkWell(
-                    onTap: () => Get.toNamed(AppRoutes.privacyPolicy),
-                    child: const SettingItem(
-                      title: AppString.privacyPolicy,
-                      image: "assets/icons/privacy_icon.svg",
+                
+                    /// Terms of Service Item here
+                    InkWell(
+                      onTap: () => Get.toNamed(AppRoutes.privacyPolicy),
+                      child: const SettingItem(
+                        title: AppString.privacyPolicy,
+                        image: "assets/icons/privacy_icon.svg",
+                      ),
                     ),
-                  ),
-              
-                  /// Privacy Policy Item here
-                  InkWell(
-                    onTap: () => Get.toNamed(AppRoutes.termsOfServices),
-                    child: const SettingItem(
-                      title: AppString.termsOfServices,
-                      image: "assets/icons/term_icon.svg",
+                
+                    /// Privacy Policy Item here
+                    InkWell(
+                      onTap: () => Get.toNamed(AppRoutes.termsOfServices),
+                      child: const SettingItem(
+                        title: AppString.termsOfServices,
+                        image: "assets/icons/term_icon.svg",
+                      ),
                     ),
-                  ),
-
-                  InkWell(
-                    onTap: () => Get.toNamed(AppRoutes.service_provider_policy),
-                    child: const SettingItem(
-                      title: AppString.serviceProviderPolicy,
-                      image: "assets/icons/service_provider_policy.svg",
+                
+                    InkWell(
+                      onTap: () => Get.toNamed(AppRoutes.service_provider_policy),
+                      child: const SettingItem(
+                        title: AppString.serviceProviderPolicy,
+                        image: "assets/icons/service_provider_policy.svg",
+                      ),
                     ),
-                  ),
-
-
-                  InkWell(
-                    onTap: () => logoutDialog(onConfirm: (){
-                      LocalStorage.isLogIn = false;
-                      LocalStorage.token = "";
-                      LocalStorage.setBool(LocalStorageKeys.isLogIn, false);
-                      LocalStorage.setString(LocalStorageKeys.token, "");
-                      Get.offAllNamed(AppRoutes.onboarding);
-                    }),
-                    child: const SettingItem(
-                      title: AppString.logOut,
-                      image: "assets/icons/logout_icon.svg",
-                      titleColor: AppColors.primaryColor,
+                
+                
+                    InkWell(
+                      onTap: () => logoutDialog(onConfirm: (){
+                        LocalStorage.isLogIn = false;
+                        LocalStorage.token = "";
+                        LocalStorage.setBool(LocalStorageKeys.isLogIn, false);
+                        LocalStorage.setString(LocalStorageKeys.token, "");
+                        Get.offAllNamed(AppRoutes.onboarding);
+                      }),
+                      child: const SettingItem(
+                        title: AppString.logOut,
+                        image: "assets/icons/logout_icon.svg",
+                        titleColor: AppColors.primaryColor,
+                      ),
                     ),
-                  ),
-
-
-                  InkWell(
-                    onTap:
-                        () => deletePopUp(
-                          controller: controller.passwordController,
-                          onTap: controller.deleteAccountRepo,
-                          isLoading: controller.isLoading,
-                        ),
-                    child: const SettingItem(
-                      title: AppString.deleteAccount,
-                      image: "assets/icons/delete_icon.svg",
-                      titleColor: AppColors.primaryColor,
+                
+                
+                    InkWell(
+                      onTap:
+                          () => deletePopUp(
+                            textController: controller.passwordController,
+                            controller: controller,
+                            onTap: controller.deleteAccountRepo,
+                            isLoading: controller.isLoading,
+                          ),
+                      child: const SettingItem(
+                        title: AppString.deleteAccount,
+                        image: "assets/icons/delete_icon.svg",
+                        titleColor: AppColors.primaryColor,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
