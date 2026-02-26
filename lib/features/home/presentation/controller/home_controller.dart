@@ -258,6 +258,9 @@ class HomeController extends GetxController {
       isOnline = response.data['data']['isOnline'];
       update();
     }
+    else{
+      Utils.successSnackBar("Notice", response.message);
+    }
   }
 
   // Change filter tab

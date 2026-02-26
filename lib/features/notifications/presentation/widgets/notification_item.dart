@@ -70,7 +70,7 @@ class _NotificationItemState extends State<NotificationItem> {
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           textAlign: TextAlign.start,
-                          maxLines: 1,
+                          maxLines: 2,
                         ),
                       ),
 
