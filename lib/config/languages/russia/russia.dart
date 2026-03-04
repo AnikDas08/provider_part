@@ -138,6 +138,7 @@ Map<String, String> russian = {
   AppString.and_text: "И",
   AppString.term_condition_text: "Условия использования",
   AppString.welcome_text: "Добро пожаловать в Velodora",
+  AppString.avarage_service_duration: "Средняя продолжительность обслуживания",
   AppString.online_voew: "Онлайн",
   AppString.view_button: "Просмотр",
   AppString.home_texts: "Главная",

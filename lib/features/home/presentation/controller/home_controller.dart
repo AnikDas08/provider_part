@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:haircutmen_user_app/features/home/presentation/controller/home_nav_controller.dart';
+import 'package:haircutmen_user_app/services/storage/storage_keys.dart';
 import '../../../../component/text/common_text.dart';
 import '../../../../config/api/api_end_point.dart';
 import '../../../../services/api/api_service.dart';
@@ -582,6 +583,8 @@ class HomeController extends GetxController {
         profileData = profileModel.data;
         name.value = profileData?.name ?? "";
         image.value = profileData?.image ?? "";
+        /*LocalStorage.userId=profileData?.id??"";
+        await LocalStorage.setString(LocalStorageKeys.userId, LocalStorage.userId);*/
 
         update();
       } else {

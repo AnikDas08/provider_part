@@ -222,6 +222,7 @@ class AppString {
   static const String done_button="Done";
   static const String select_option="Select Option";
   static const String uploaded_images="Uploaded Images";
+  static const String avarage_service_duration="Average Service Duration";
   static const String add_button="Add";
   static const String info="Info";
   static const String service_delete_here_word="The first service cannot be deleted";

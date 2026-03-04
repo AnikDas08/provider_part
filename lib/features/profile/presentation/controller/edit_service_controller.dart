@@ -102,6 +102,7 @@ class EditServiceController extends GetxController {
   RxBool isInitializing = true.obs;
   List<LocationModel> locationSuggestions = [];
   bool isLocationLoading = false;
+  var selectedDuration = ''.obs;
 
 
   // API Data - Changed to use Map format like complete profile controller
@@ -110,8 +111,10 @@ class EditServiceController extends GetxController {
   var isLoadingSubCategories = <String, bool>{}.obs;
 
   // Default coordinates (Dhaka, Bangladesh)
-  double latitude = 23.8103;
-  double longitude = 90.4125;
+  double latitude = 0.0;
+  double longitude = 0.0;
+  double previousLatitude = 0.0;
+  double previousLongitude = 0.0;
 
   // Asset images (can be modified/removed)
   RxList<String> assetImages = <String>[].obs;
@@ -159,6 +162,43 @@ class EditServiceController extends GetxController {
     "Spanish",
     "Portuguese"
   ];
+
+  final List<String> durations = [
+    '30 Minutes',
+    '1 Hour',
+    '1 Hour 30 Minutes',
+    '2 Hour',
+    '2 Hour 30 Minutes',
+    '3 Hour',
+  ];
+
+  int get avgDurationInMinutes {
+    switch (selectedDuration.value) {
+      case '30 Minutes': return 30;
+      case '1 Hour': return 60;
+      case '1 Hour 30 Minutes': return 90;
+      case '2 Hour': return 120;
+      case '2 Hour 30 Minutes': return 150;
+      case '3 Hour': return 180;
+      default: return 30;
+    }
+  }
+
+  String minutesToDurationLabel(int minutes) {
+    switch (minutes) {
+      case 30: return '30 Minutes';
+      case 60: return '1 Hour';
+      case 90: return '1 Hour 30 Minutes';
+      case 120: return '2 Hour';
+      case 150: return '2 Hour 30 Minutes';
+      case 180: return '3 Hour';
+      default: return '30 Minutes';
+    }
+  }
+
+  void selectDuration(String value) {
+    selectedDuration.value = value;
+  }
 
   bool isLanguageSelected(String language) {
     return selectedLanguages.contains(language);
@@ -385,41 +425,6 @@ class EditServiceController extends GetxController {
     return isLoadingSubCategories[categoryId] ?? false;
   }
 
-  // Get current location
-  Future<void> getCurrentLocation() async {
-    try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        print("Location services are disabled");
-        return;
-      }
-
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          print("Location permission denied");
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        print("Location permissions are permanently denied");
-        return;
-      }
-
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-
-      latitude = position.latitude;
-      longitude = position.longitude;
-
-      print("Location fetched - Lat: $latitude, Long: $longitude");
-      update();
-    } catch (e) {
-      print("Failed to get location: $e (using default coordinates)");
-    }
-  }
 
   List<Map<String, dynamic>> getAllImages() {
     List<Map<String, dynamic>> allImages = [];
@@ -777,14 +782,25 @@ class EditServiceController extends GetxController {
         "update": updateServices,
       };
 
+
       // Build data object
       Map<String, dynamic> dataObject = {
         "aboutMe": aboutMeController.text.trim(),
         "serviceLanguage": selectedLanguages.toList(),
         "primaryLocation": locationController.text.trim(),
+        "avgDuration": avgDurationInMinutes,
+        if(latitude!=0.0 && longitude!=0.0)
         "location": {
           "type": "Point",
           "coordinates": [longitude, latitude]
+        },
+        if(latitude==0.0 && longitude==0.0)
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            providerData.value!.location!.coordinates![0], // longitude
+            providerData.value!.location!.coordinates![1], // latitude
+          ]
         },
         "serviceDistance": serviceDistance.value,
         "pricePerHour": (double.tryParse(pricePerHourController.text.trim()) ?? 0).toInt(),
@@ -992,6 +1008,10 @@ class EditServiceController extends GetxController {
 
     if (data.serviceDistance != null) {
       serviceDistance.value = data.serviceDistance!.toDouble();
+    }
+
+    if (data.avgDuration != null) {
+      selectedDuration.value = minutesToDurationLabel(data.avgDuration!);
     }
 
     if (data.pricePerHour != null) {

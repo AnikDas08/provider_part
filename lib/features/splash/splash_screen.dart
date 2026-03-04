@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3), () async {
       String? savedLanguage = AppAuthStorage().getValue(StorageKey.language) ?? "en";
 
+
       print("language : $savedLanguage👌👌👌👌👌");
       print("language : ${LocalStorage.userId}👌👌👌👌👌");
 

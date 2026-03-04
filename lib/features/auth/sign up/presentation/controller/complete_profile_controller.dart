@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
+import 'package:haircutmen_user_app/utils/constants/app_colors.dart';
 import 'package:haircutmen_user_app/utils/constants/app_string.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
@@ -143,6 +144,7 @@ class CompleteProfileController extends GetxController {
   // Location (now populated from autocomplete selection)
   double latitude = 0.0;
   double longitude = 0.0;
+  var selectedDuration = ''.obs;
 
   // Static Data
   final languages = [
@@ -426,6 +428,22 @@ class CompleteProfileController extends GetxController {
     return selectedLanguages.contains(language);
   }
 
+  int get avgDurationInMinutes {
+    switch (selectedDuration.value) {
+      case '30 Minutes': return 30;
+      case '1 Hour': return 60;
+      case '1 Hour 30 Minutes': return 90;
+      case '2 Hour': return 120;
+      case '2 Hour 30 Minutes': return 150;
+      case '3 Hour': return 180;
+      default: return 30;
+    }
+  }
+
+  void selectDuration(String value) {
+    selectedDuration.value = value;
+  }
+
   // ----------------- Slider -----------------
   void updateServiceDistance(double value) {
     serviceDistance.value = value;
@@ -450,6 +468,8 @@ class CompleteProfileController extends GetxController {
       Get.snackbar(
         AppString.error,
         "Please select a location from the suggestions",
+        backgroundColor: AppColors.primaryColor,
+        colorText: AppColors.white
       );
       return false;
     }
@@ -501,6 +521,7 @@ class CompleteProfileController extends GetxController {
           "type": "Point",
           "coordinates": [longitude, latitude],
         },
+        "avgDuration": avgDurationInMinutes,
         "serviceDistance": serviceDistance.value,
         "pricePerHour":
         double.tryParse(pricePerHourController.text.trim()) ?? 0.0,

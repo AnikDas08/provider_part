@@ -121,6 +121,7 @@ Map<String, String> english = {
   AppString.hint_type_here: "Type Here...",
   AppString.service_text: "Service",
   AppString.service_hint: "Type of Service",
+  AppString.avarage_service_duration: "Average Service Duration",
   AppString.additional_service_text: "Sub Category of Service Type",
   AppString.additional_service_hints: "Type your Sub-Category",
   AppString.add_service_language: "Add Service Language",

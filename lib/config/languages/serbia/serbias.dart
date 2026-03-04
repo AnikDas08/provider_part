@@ -119,6 +119,7 @@ Map<String, String> serbian = {
   AppString.favourite: "Omiljeno",
   AppString.favouriteScreen: "Ekran omiljenih",
   AppString.messageNot: "Nisu pronađene poruke",
+  AppString.avarage_service_duration: "Prosečno trajanje usluge",
   AppString.complete_profile_text: "Završi profil",
   AppString.about_me_text: "O meni",
   AppString.hint_type_here: "Kucajte ovde...",

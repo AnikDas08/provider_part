@@ -23,6 +23,7 @@ class PendingViewDetailsController extends GetxController {
   var date = ''.obs;
   var time = ''.obs;
   var amount = ''.obs;
+  var subTotal = ''.obs;
 
   @override
   void onInit() {
@@ -142,6 +143,7 @@ class PendingViewDetailsController extends GetxController {
 
     // Amount
     amount.value = bookingData['amount']?.toString() ?? '0';
+    subTotal.value = bookingData['subTotal']?.toString() ?? '0';
 
     // Booking ID (last 4 digits)
     if (bookingData['_id'] != null && bookingData['_id'].toString().length >= 4) {

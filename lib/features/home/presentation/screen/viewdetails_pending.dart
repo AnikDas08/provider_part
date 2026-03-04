@@ -181,7 +181,7 @@ class ViewDetailsPending extends StatelessWidget {
                                 ),
                                 SizedBox(height: 6.h),
                                 CommonText(
-                                  text: "RSD: ${controller.amount.value}",
+                                  text: "RSD: ${controller.subTotal.value}",
                                   fontSize: 12.sp,
                                   color: AppColors.black400,
                                   fontWeight: FontWeight.w500,
