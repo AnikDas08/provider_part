@@ -29,6 +29,12 @@ class AppString {
   static const String continues = "Continue";
   static const String resend_otp = "Resend Otp";
   static const String successful = "Successful";
+  static const String sub_total = "Sub Total";
+  static const String weather_fee = "Weather Fee";
+  static const String convineance_fee = "Service fee";
+  static const String arrival_fee = "Arrival Fee";
+  static const String discount = "Discount";
+  static const String total_price = "Total Price";
   static const String profile_upload_successfully = "Profile uploaded successfully!";
   static const String user_exits = "User Already Exist, Need Signin";
   static const String successful_send_otp = "OTP Send Successfully";

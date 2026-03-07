@@ -23,254 +23,319 @@ class CanceldetailsScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Obx(
-              () => controller.isLoading.value
-              ? Center(
-            child: CircularProgressIndicator(
-              color: AppColors.primaryColor,
-            ),
-          )
-              : Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: CustomAppBar(
-                  title: AppString.view_details_text,
-                  titleColor: AppColors.primaryColor,
-                ),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 10.h),
-                  padding: EdgeInsets.all(12.w),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 137.w,
-                            height: 144.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.zero,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.zero,
-                              child: controller.userImage.value.isNotEmpty &&
-                                  (controller.userImage.value
-                                      .startsWith('http') ||
-                                      controller.userImage.value
-                                          .startsWith('/'))
-                                  ? Image.network(
-                                ApiEndPoint.imageUrl +
-                                    controller.userImage.value,
-                                fit: BoxFit.cover,
-                                errorBuilder:
-                                    (context, error, stackTrace) {
-                                  return Image.asset(
-                                    "assets/images/noImage.png",
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                              )
-                                  : Image.asset(
-                                "assets/images/noImage.png",
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+          () =>
+              controller.isLoading.value
+                  ? Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryColor,
+                    ),
+                  )
+                  : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: CustomAppBar(
+                            title: AppString.view_details_text,
+                            titleColor: AppColors.primaryColor,
                           ),
-
-                          SizedBox(width: 12.w),
-                          // Booking Details
-                          Expanded(
+                        ),
+                        SizedBox(height: 20.h),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 10.h),
+                            padding: EdgeInsets.all(12.w),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.r),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CommonText(
-                                  text: controller.userName.value,
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.black400,
-                                ),
-                                SizedBox(height: 6.h),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SvgPicture.asset(
-                                      "assets/icons/propetion_icon.svg",
-                                      width: 16.w,
-                                      height: 16.h,
-                                      color: AppColors.black400,
-                                    ),
-                                    SizedBox(width: 4.w),
-                                    CommonText(
-                                      text: controller.serviceName.value,
-                                      fontSize: 14.sp,
-                                      color: AppColors.black400,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 6.h),
                                 Row(
                                   children: [
-                                    SvgPicture.asset(
-                                      "assets/icons/day_icon.svg",
-                                      width: 16.w,
-                                      height: 16.h,
-                                      color: AppColors.black300,
+                                    Container(
+                                      width: 137.w,
+                                      height: 144.h,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.zero,
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.zero,
+                                        child:
+                                            controller
+                                                        .userImage
+                                                        .value
+                                                        .isNotEmpty &&
+                                                    (controller.userImage.value
+                                                            .startsWith('http') ||
+                                                        controller.userImage.value
+                                                            .startsWith('/'))
+                                                ? Image.network(
+                                                  ApiEndPoint.imageUrl +
+                                                      controller.userImage.value,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (
+                                                    context,
+                                                    error,
+                                                    stackTrace,
+                                                  ) {
+                                                    return Image.asset(
+                                                      "assets/images/noImage.png",
+                                                      fit: BoxFit.cover,
+                                                    );
+                                                  },
+                                                )
+                                                : Image.asset(
+                                                  "assets/images/noImage.png",
+                                                  fit: BoxFit.cover,
+                                                ),
+                                      ),
                                     ),
-                                    SizedBox(width: 4.w),
-                                    CommonText(
-                                      text: controller.date.value,
-                                      fontSize: 12.sp,
-                                      color: AppColors.black300,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                    
                                     SizedBox(width: 12.w),
-                                    SvgPicture.asset(
-                                      "assets/icons/time_icon.svg",
-                                      width: 16.w,
-                                      height: 16.h,
-                                      color: AppColors.black300,
-                                    ),
-                                    SizedBox(width: 4.w),
-                                    CommonText(
-                                      text: controller.time.value,
-                                      fontSize: 12.sp,
-                                      color: AppColors.black300,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 6.h),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SvgPicture.asset(
-                                      "assets/icons/location_icon.svg",
-                                      width: 16.w,
-                                      height: 16.h,
-                                      color: AppColors.black300,
-                                    ),
-                                    SizedBox(width: 4.w),
-                                    Flexible(
-                                      child: CommonText(
-                                        text: controller.userLocation.value,
-                                        fontSize: 12.sp,
-                                        textAlign: TextAlign.start,
-                                        color: AppColors.black300,
-                                        fontWeight: FontWeight.w400,
-                                        maxLines: 4,
+                                    // Booking Details
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CommonText(
+                                            text: controller.userName.value,
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: AppColors.black400,
+                                          ),
+                                          SizedBox(height: 6.h),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SvgPicture.asset(
+                                                "assets/icons/propetion_icon.svg",
+                                                width: 16.w,
+                                                height: 16.h,
+                                                color: AppColors.black400,
+                                              ),
+                                              SizedBox(width: 4.w),
+                                              CommonText(
+                                                text:
+                                                    controller.serviceName.value,
+                                                fontSize: 14.sp,
+                                                color: AppColors.black400,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 6.h),
+                                          Row(
+                                            children: [
+                                              SvgPicture.asset(
+                                                "assets/icons/day_icon.svg",
+                                                width: 16.w,
+                                                height: 16.h,
+                                                color: AppColors.black300,
+                                              ),
+                                              SizedBox(width: 4.w),
+                                              CommonText(
+                                                text: controller.date.value,
+                                                fontSize: 12.sp,
+                                                color: AppColors.black300,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              SizedBox(width: 12.w),
+                                              SvgPicture.asset(
+                                                "assets/icons/time_icon.svg",
+                                                width: 16.w,
+                                                height: 16.h,
+                                                color: AppColors.black300,
+                                              ),
+                                              SizedBox(width: 4.w),
+                                              CommonText(
+                                                text: controller.time.value,
+                                                fontSize: 12.sp,
+                                                color: AppColors.black300,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 6.h),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SvgPicture.asset(
+                                                "assets/icons/location_icon.svg",
+                                                width: 16.w,
+                                                height: 16.h,
+                                                color: AppColors.black300,
+                                              ),
+                                              SizedBox(width: 4.w),
+                                              Flexible(
+                                                child: CommonText(
+                                                  text: controller.location.value,
+                                                  fontSize: 12.sp,
+                                                  textAlign: TextAlign.start,
+                                                  color: AppColors.black300,
+                                                  fontWeight: FontWeight.w400,
+                                                  maxLines: 4,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 6.h),
+                                          CommonText(
+                                            text:
+                                                "RSD: ${controller.subTotal.value}",
+                                            fontSize: 12.sp,
+                                            color: AppColors.black400,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 6.h),
+                                SizedBox(height: 12),
+                                if (controller.description != "") ...[
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      CommonText(
+                                        text:
+                                            "${AppString.description_text_here}:",
+                                        fontSize: 14.sp,
+                                        textAlign: TextAlign.start,
+                                        color: AppColors.black500,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Flexible(
+                                        child: CommonText(
+                                          text: controller.description,
+                                          fontSize: 14.sp,
+                                          color: AppColors.black400,
+                                          maxLines: 8,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.start,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 16),
+                                  Divider(color: AppColors.black200),
+                                  SizedBox(height: 8),
+                                  _priceRow(
+                                    AppString.sub_total,
+                                    "RSD ${controller.subTotal.value}",
+                                  ),
+                                  SizedBox(height: 6.h),
+                                  _priceRow(
+                                    AppString.weather_fee,
+                                    "RSD ${controller.weatherFee.value}",
+                                  ),
+                                  SizedBox(height: 6.h),
+                                  //_priceRow(AppString.convineance_fee, "RSD ${controller.convenienceFee.value}"),
+                                  //SizedBox(height: 6.h),
+                                  _priceRow(
+                                    AppString.arrival_fee,
+                                    "RSD ${controller.arrivalFee.value}",
+                                  ),
+                                  SizedBox(height: 6.h),
+                                  //_priceRow("${AppString.discount.tr} (${controller.discount.value}%)", "- RSD ${controller.discount.value}", valueColor: Colors.green),
+                                  //SizedBox(height: 8),
+                                  Divider(color: AppColors.black200),
+                                  SizedBox(height: 6.h),
+                                  _priceRow(
+                                    AppString.total_price,
+                                    "RSD ${controller.totalPrice.value}",
+                                    isBold: true,
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        if (controller.image != "")
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 CommonText(
-                                  text: "RSD: ${controller.subTotal.value}",
-                                  fontSize: 12.sp,
-                                  color: AppColors.black400,
-                                  fontWeight: FontWeight.w500,
+                                  text: "Reference Image",
+                                  textAlign: TextAlign.start,
+                                  fontSize: 18.sp,
+                                ),
+                                SizedBox(height: 10.h),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (controller.image != "") {
+                                      ImageViewerScreen.openSingle(
+                                        Get.context!,
+                                        ApiEndPoint.socketUrl + controller.image,
+                                        isNetwork: true,
+                                      );
+                                    } else {
+                                      ImageViewerScreen.openSingle(
+                                        Get.context!,
+                                        "assets/images/noImage.png",
+                                        isNetwork: false,
+                                      );
+                                    }
+                                  },
+                                  child: Image.network(
+                                    ApiEndPoint.socketUrl + controller.image,
+                                    width: double.infinity,
+                                    height: 150.h,
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Image.asset(
+                                              "assets/images/noImage.png",
+                                            ),
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 12,),
-                      if(controller.description!="")...[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CommonText(
-                            text: "${AppString.description_text_here}:",
-                            fontSize: 14.sp,
-                            textAlign: TextAlign.start,
-                            color: AppColors.black500,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          SizedBox(width: 10),
-                          Flexible(
-                            child: CommonText(
-                              text: controller.description,
-                              fontSize: 14.sp,
-                              color: AppColors.black400,
-                              maxLines: 8,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.start,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-      ]
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              if(controller.image!="")
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CommonText(
-                      text: "Reference Image",
-                      textAlign: TextAlign.start,
-                      fontSize: 18.sp,
+                      ],
                     ),
-                    SizedBox(height: 10.h),
-                    GestureDetector(
-                      onTap: (){
-                        if (controller.image != "") {
-                          ImageViewerScreen.openSingle(
-                            Get.context!,
-                            ApiEndPoint.socketUrl + controller.image,
-                            isNetwork: true,
-                          );
-                        }
-                        else{
-                          ImageViewerScreen.openSingle(
-                              Get.context!,
-                              "assets/images/noImage.png",
-                              isNetwork: false
-                          );
-                        }
-                      },
-                      child: Image.network(
-                        ApiEndPoint.socketUrl+controller.image,
-                        width: double.infinity,
-                        height: 150.h,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/noImage.png"),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
+                  ),
         ),
       ),
+    );
+  }
+  Widget _priceRow(String label, String value, {Color? valueColor, bool isBold = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        CommonText(
+          text: label,
+          fontSize: 13.sp,
+          color: AppColors.black400,
+          fontWeight: isBold ? FontWeight.w600 : FontWeight.w400,
+        ),
+        CommonText(
+          text: value,
+          fontSize: 13.sp,
+          color: valueColor ??
+              (isBold ? AppColors.black500 : AppColors.black400),
+          fontWeight: isBold ? FontWeight.w600 : FontWeight.w400,
+        ),
+      ],
     );
   }
 }
