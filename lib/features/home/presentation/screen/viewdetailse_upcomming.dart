@@ -195,7 +195,7 @@ class ViewDetailsUpcoming extends StatelessWidget {
                                           textAlign: TextAlign.start,
                                           color: AppColors.black300,
                                           fontWeight: FontWeight.w400,
-                                          maxLines: 4,
+                                          maxLines: 7,
                                         ),
                                       ),
                                     ],
