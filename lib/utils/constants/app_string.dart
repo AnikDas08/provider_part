@@ -6,7 +6,7 @@ class AppString {
   static const String youSureWantToLogout = "You sure want to logout";
   static const String no = "No";
   static const String yes = "Yes";
-  static const String areYouSure = "Are you sure";
+  static const String areYouSure = "Do you want to Delete your Account?";
   static const String enterYouPassword = "Enter you password";
   static const String cancel = "Cancel";
   static const String done = "Done";
@@ -151,7 +151,7 @@ class AppString {
   static const String new_passowrd_text="New Password";
   static const String confirm_password_text="Confirm Password";
   static const String hint_new_password="Enter New Password";
-  static const String hint_confirm_password="Enter Confirm Password";
+  static const String hint_confirm_password="Confirm Password";
   static const String confirm_button="Confirm";
   static const String submit_approve="Submit for Approval";
   static const String password_change_now="Your Password Has Been\nChanged";
@@ -178,9 +178,12 @@ class AppString {
   static const String add_new="Please Attach Your Work Photos (Not Mandatory) Maximum 10 Image";
   static const String upload_image_text="Upload Image";
   static const String add_text="Add";
-  static const String continue_by="By Continue";
+  static const String continue_by="By continuing, you agree to our ";
+  static const String delete_account_android="Do you want to Delete you Account?";
+  static const String delete_after="After 30 days your account will be deleted. All data will be removed from your account. ";
+  static const String privacy_policy_name="Privacy Policy and Terms & Conditions";
   static const String privacy_policy_text="Privacy Policy";
-  static const String and_text="And";
+  static const String and_text="and";
   static const String term_condition_text="Terms & Condition";
 
   /// Home Screen
@@ -322,6 +325,9 @@ class AppString {
   static const String german_language="German";
   static const String spanish_language="Spanish";
   static const String portugue_language="Portuguese";
+  static const String italian_language="Italian";
+  static const String franceh_language="French";
+  static const String review_not="No reviews yet";
   static const String error="Error";
   static const String rating_show="Please select a rating";
   static const String limit_reached="Limit Reached";
@@ -381,7 +387,7 @@ class AppString {
   static const String chat_not="No chats found";
   static const String select_schedule="Select Schedule";
 
-  static const String password_show="Give your password to confirm your account.";
+  static const String password_show="After 30 days your account will be deleted. All data will be removed from your account.";
   static const String enter_password="Enter Your Password";
 
   static const String sat="Sat";

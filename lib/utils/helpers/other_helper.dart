@@ -14,27 +14,27 @@ class OtherHelper {
 
   static String? validator(value) {
     if (value.isEmpty) {
-      return AppString.thisFieldIsRequired;
+      return AppString.thisFieldIsRequired.tr;
     }
     return null;
   }
 
   static String? emailValidator(value) {
     if (value == null || value.isEmpty) {
-      return AppString.thisFieldIsRequired;
+      return AppString.thisFieldIsRequired.tr;
     } else if (!emailRegexp.hasMatch(value)) {
-      return AppString.enterValidEmail;
+      return AppString.enterValidEmail.tr;
     }
     return null;
   }
 
   static String? passwordValidator(value) {
     if (value == null || value.isEmpty) {
-      return AppString.thisFieldIsRequired;
+      return AppString.thisFieldIsRequired.tr;
     } else if (value.length < 8) {
-      return AppString.passwordMustBeeEightCharacters;
+      return AppString.passwordMustBeeEightCharacters.tr;
     } else if (!passRegExp.hasMatch(value)) {
-      return AppString.passwordMustBeeEightCharacters;
+      return AppString.passwordMustBeeEightCharacters.tr;
     }
     return null;
   }
@@ -44,9 +44,9 @@ class OtherHelper {
     TextEditingController passwordController,
   ) {
     if (value == null || value.isEmpty) {
-      return AppString.thisFieldIsRequired;
+      return AppString.thisFieldIsRequired.tr;
     } else if (value != passwordController.text) {
-      return AppString.thePasswordDoesNotMatch;
+      return AppString.thePasswordDoesNotMatch.tr;
     }
     return null;
   }

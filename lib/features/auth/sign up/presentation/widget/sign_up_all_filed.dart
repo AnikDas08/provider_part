@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:haircutmen_user_app/features/auth/sign%20up/presentation/controller/sign_up_controller.dart';
@@ -21,15 +22,15 @@ class SignUpAllFiled extends StatefulWidget {
 
 class _SignUpAllFieldState extends State<SignUpAllFiled> {
   Country selectedCountry = Country(
-    phoneCode: '880',
-    countryCode: 'BD',
+    phoneCode: '381',
+    countryCode: 'RS',
     e164Sc: 0,
     geographic: true,
     level: 1,
-    name: 'Bangladesh',
-    example: 'Bangladesh',
-    displayName: 'Bangladesh',
-    displayNameNoCountryCode: 'BD',
+    name: 'Serbia',
+    example: 'Serbia',
+    displayName: 'Serbia',
+    displayNameNoCountryCode: 'RS',
     e164Key: '',
   );
 
@@ -38,10 +39,9 @@ class _SignUpAllFieldState extends State<SignUpAllFiled> {
   @override
   void initState() {
     super.initState();
-    // Listen to phone number changes and update main controller with country code
+    widget.controller.countryCode = '+381';
     _phoneController.addListener(_updateMainController);
   }
-
   @override
   void dispose() {
     _phoneController.removeListener(_updateMainController);
@@ -61,23 +61,23 @@ class _SignUpAllFieldState extends State<SignUpAllFiled> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         /// User Name here
-        const CommonText(
-          text: AppString.name_text,
+        CommonText(
+          text: AppString.name_text.tr,
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: AppColors.black400,
         ),
         SizedBox(height: 6),
         CommonTextField(
-          hintText: AppString.hints_name,
+          hintText: AppString.hints_name.tr,
           hintTextColor: AppColors.black100,
           controller: widget.controller.nameController,
           validator: OtherHelper.validator,
         ),
 
         /// User Email here
-        const CommonText(
-          text: AppString.email,
+        CommonText(
+          text: AppString.email.tr,
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: AppColors.black400,
@@ -85,15 +85,15 @@ class _SignUpAllFieldState extends State<SignUpAllFiled> {
           bottom: 6,
         ),
         CommonTextField(
-          hintText: AppString.hint_email_text,
+          hintText: AppString.hint_email_text.tr,
           hintTextColor: AppColors.black100,
           controller: widget.controller.emailController,
           validator: OtherHelper.emailValidator,
         ),
 
         /// User phone number with country picker
-        const CommonText(
-          text: AppString.phone_number_text,
+           CommonText(
+          text: AppString.phone_number_text.tr,
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: AppColors.black400,
@@ -157,8 +157,8 @@ class _SignUpAllFieldState extends State<SignUpAllFiled> {
         ),*/
 
 
-        const CommonText(
-          text: AppString.password_text,
+        CommonText(
+          text: AppString.password_text.tr,
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: AppColors.black400,
@@ -166,7 +166,7 @@ class _SignUpAllFieldState extends State<SignUpAllFiled> {
           top: 12,
         ),
         CommonTextField(
-          hintText: AppString.password_hint,
+          hintText: AppString.password_hint.tr,
           hintTextColor: AppColors.black100,
           controller: widget.controller.passwordController,
           isPassword: true,
@@ -174,8 +174,8 @@ class _SignUpAllFieldState extends State<SignUpAllFiled> {
         ),
 
         /// User Confirm Password here
-        const CommonText(
-          text: AppString.confirm_password_text,
+         CommonText(
+          text: AppString.confirm_password_text.tr,
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: AppColors.black400,
@@ -183,7 +183,7 @@ class _SignUpAllFieldState extends State<SignUpAllFiled> {
           top: 12,
         ),
         CommonTextField(
-          hintText: AppString.hint_confirm_password,
+          hintText: AppString.hint_confirm_password.tr,
           hintTextColor: AppColors.black100,
           controller: widget.controller.confirmPasswordController,
           isPassword: true,
@@ -202,7 +202,7 @@ class _SignUpAllFieldState extends State<SignUpAllFiled> {
           bottom: 6,
         ),
         CommonTextField(
-          hintText: AppString.referal_code_hint,
+          hintText: AppString.referal_code_hint.tr,
           hintTextColor: AppColors.black100,
           controller: widget.controller.referralController,
           validator: OtherHelper.validator,

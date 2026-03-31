@@ -153,7 +153,9 @@ class CompleteProfileController extends GetxController {
     AppString.serbian_language,
     AppString.german_language,
     AppString.spanish_language,
-    AppString.portugue_language
+    AppString.portugue_language,
+    AppString.italian_language,
+    AppString.franceh_language
   ];
 
   @override

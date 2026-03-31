@@ -131,7 +131,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: AppString.privacy_policy_text.tr,
+                    text: AppString.privacy_policy_name.tr,
                     style: TextStyle(
                       color: AppColors.primaryColor,
                       decoration: TextDecoration.underline,
@@ -141,7 +141,7 @@ class SignUpScreen extends StatelessWidget {
                         Get.toNamed(AppRoutes.privacyPolicy);// or Navigator.push(...)
                       },
                   ),
-                  TextSpan(text: " ${AppString.and_text.tr} "),
+                  /*TextSpan(text: " ${AppString.and_text.tr} "),
                   TextSpan(
                     text: AppString.term_condition_text.tr,
                     style: TextStyle(
@@ -152,7 +152,7 @@ class SignUpScreen extends StatelessWidget {
                       ..onTap = () {
                         Get.toNamed(AppRoutes.termsOfServices); // or Navigator.push(...)
                       },
-                  ),
+                  ),*/
                 ],
               ),
             ),

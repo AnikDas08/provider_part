@@ -157,9 +157,10 @@ class SignUpController extends GetxController {
   bool isLoadingVerify = false;
   bool isLoadingWork=false;
   var isPrivacyAccepted = false.obs;
-  String completePhoneNumber = ''; // Stores phone with country code
-  String countryCode = '+880'; // Stores selected country code
-  String countryFlag = '🇧🇩';
+  String completePhoneNumber = '';
+
+  String countryCode = '+381';
+  String countryFlag = '🇷🇸';
 
   List<LocationModel> locationSuggestions = [];
   bool isLocationLoading = false;

@@ -475,7 +475,7 @@ class ServiceProfileScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8.h),
                 CommonText(
-                  text: "No reviews yet",
+                  text: AppString.review_not,
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   color: AppColors.black200,
@@ -496,7 +496,7 @@ class ServiceProfileScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CommonText(
-                text: "${AppString.review} (${controller.totalReviews.value})",
+                text: "${AppString.review.tr} (${controller.totalReviews.value})",
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: AppColors.black400,
