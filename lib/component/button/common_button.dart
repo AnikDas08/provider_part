@@ -22,7 +22,7 @@ class CommonButton extends StatefulWidget {
     this.onTap,
     required this.titleText,
     this.titleColor = AppColors.white,
-    this.buttonColor = AppColors.primaryColor,
+    this.buttonColor = AppColors.black,
     this.titleSize = 18,
     this.buttonRadius = 4,
     this.titleWeight = FontWeight.w700,

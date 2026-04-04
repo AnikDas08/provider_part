@@ -18,7 +18,7 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.2.0
-  google_fonts: ^6.2.1
+  google_fonts: ^8.0.2
   shared_preferences: ^2.5.3
   mime: ^2.0.0
   flutter_local_notifications: ^18.0.0

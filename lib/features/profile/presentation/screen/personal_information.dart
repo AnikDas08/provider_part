@@ -124,8 +124,8 @@ class PersonalInformationScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20.h,),
-                  CustomButton
-                    (text: AppString.edit_profile_button,
+                  CustomButton(
+                      text: AppString.edit_profile_button,
                       isSelected: true,
                       onTap: (){
                       Get.toNamed(AppRoutes.editProfile);
