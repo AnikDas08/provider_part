@@ -414,6 +414,49 @@ class CompleteProfileScreen extends StatelessWidget {
 
         SizedBox(height: 16.h),
 
+// Average Service Duration
+        _buildFieldWithLabel(
+          label: "Average Service Duration",
+          child: Obx(() => GestureDetector(
+            onTap: () => _showDurationBottomSheet(controller),
+            child: Container(
+              height: 44.h,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.black50),
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: CommonText(
+                        text: controller.selectedDuration.value.isEmpty
+                            ? "Select duration"
+                            : controller.selectedDuration.value,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: controller.selectedDuration.value.isEmpty
+                            ? AppColors.textFiledColor
+                            : AppColors.black,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.keyboard_arrow_down,
+                    color: AppColors.textFiledColor,
+                    size: 20.sp,
+                  ),
+                ],
+              ),
+            ),
+          )),
+        ),
+
+        SizedBox(height: 16.h),
+
         // Primary Location
         _buildFieldWithLabel(
           label: AppString.primary_location_text,
@@ -1091,6 +1134,100 @@ class CompleteProfileScreen extends StatelessWidget {
           ),
         )),
       ],
+    );
+  }
+
+  void _showDurationBottomSheet(CompleteProfileController controller) {
+    final durations = [
+      '30 Minutes',
+      '1 Hour',
+      '1 Hour 30 Minutes',
+      '2 Hour',
+      '2 Hour 30 Minutes',
+      '3 Hour',
+    ];
+
+    showModalBottomSheet(
+      context: Get.context!,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Container(
+            padding: EdgeInsets.all(20.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40.w,
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                    color: AppColors.black50,
+                    borderRadius: BorderRadius.circular(2.r),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                CommonText(
+                  text: AppString.avarage_service_duration,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.black,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16.h),
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: durations.map((duration) {
+                        return Obx(() => GestureDetector(
+                          onTap: () {
+                            controller.selectDuration(duration);
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: AppColors.black50,
+                                  width: 0.5,
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: CommonText(
+                                    text: duration,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColors.black,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                                if (controller.selectedDuration.value == duration)
+                                  Icon(
+                                    Icons.check_circle,
+                                    color: AppColors.primaryColor,
+                                    size: 20.sp,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ));
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

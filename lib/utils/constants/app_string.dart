@@ -6,7 +6,7 @@ class AppString {
   static const String youSureWantToLogout = "You sure want to logout";
   static const String no = "No";
   static const String yes = "Yes";
-  static const String areYouSure = "Are you sure";
+  static const String areYouSure = "Do you want to Delete your Account?";
   static const String enterYouPassword = "Enter you password";
   static const String cancel = "Cancel";
   static const String done = "Done";
@@ -29,6 +29,12 @@ class AppString {
   static const String continues = "Continue";
   static const String resend_otp = "Resend Otp";
   static const String successful = "Successful";
+  static const String sub_total = "Sub Total";
+  static const String weather_fee = "Weather Fee";
+  static const String convineance_fee = "Service fee";
+  static const String arrival_fee = "Arrival Fee";
+  static const String discount = "Discount";
+  static const String total_price = "Total Price";
   static const String profile_upload_successfully = "Profile uploaded successfully!";
   static const String user_exits = "User Already Exist, Need Signin";
   static const String successful_send_otp = "OTP Send Successfully";
@@ -67,7 +73,7 @@ class AppString {
   static const String logOut = "Log Out";
   static const String privacyPolicy = "Privacy Policy";
   static const String deleteAccount = "Delete account";
-  static const String termsOfServices = "Terms & Condition";
+  static const String termsOfServices = "Terms of Use";
   static const String serviceProviderPolicy = "Service Provider Usage Policy";
   static const String noInternetConnection = "No internet connection";
   static const String badResponseRequest = "Bad Response Request";
@@ -145,7 +151,7 @@ class AppString {
   static const String new_passowrd_text="New Password";
   static const String confirm_password_text="Confirm Password";
   static const String hint_new_password="Enter New Password";
-  static const String hint_confirm_password="Enter Confirm Password";
+  static const String hint_confirm_password="Confirm Password";
   static const String confirm_button="Confirm";
   static const String submit_approve="Submit for Approval";
   static const String password_change_now="Your Password Has Been\nChanged";
@@ -172,13 +178,16 @@ class AppString {
   static const String add_new="Please Attach Your Work Photos (Not Mandatory) Maximum 10 Image";
   static const String upload_image_text="Upload Image";
   static const String add_text="Add";
-  static const String continue_by="By Continue";
+  static const String continue_by="By continuing, you agree to our ";
+  static const String delete_account_android="Do you want to Delete you Account?";
+  static const String delete_after="After 30 days your account will be deleted. All data will be removed from your account. ";
+  static const String privacy_policy_name="Privacy Policy and Terms & Conditions";
   static const String privacy_policy_text="Privacy Policy";
-  static const String and_text="And";
+  static const String and_text="and";
   static const String term_condition_text="Terms & Condition";
 
   /// Home Screen
-  static const String welcome_text="Welcome To Veldora";
+  static const String welcome_text="Welcome To Velodora";
   static const String online_voew="Online";
   static const String view_button="View";
   static const String home_texts="Home";
@@ -186,7 +195,7 @@ class AppString {
   static const String qr_texrt="QR Code";
   static const String message_text="Message";
   static const String profile_text="Profile";
-  static const String upcoming_button="UpComing";
+  static const String upcoming_button="Upcoming";
   static const String pending_button="Pending";
   static const String Cancel_button="Canceled";
   static const String view_details_text="View Details";
@@ -222,6 +231,7 @@ class AppString {
   static const String done_button="Done";
   static const String select_option="Select Option";
   static const String uploaded_images="Uploaded Images";
+  static const String avarage_service_duration="Average Service Duration";
   static const String add_button="Add";
   static const String info="Info";
   static const String service_delete_here_word="The first service cannot be deleted";
@@ -315,6 +325,9 @@ class AppString {
   static const String german_language="German";
   static const String spanish_language="Spanish";
   static const String portugue_language="Portuguese";
+  static const String italian_language="Italian";
+  static const String franceh_language="French";
+  static const String review_not="No reviews yet";
   static const String error="Error";
   static const String rating_show="Please select a rating";
   static const String limit_reached="Limit Reached";
@@ -374,7 +387,7 @@ class AppString {
   static const String chat_not="No chats found";
   static const String select_schedule="Select Schedule";
 
-  static const String password_show="Give your password to confirm your account.";
+  static const String password_show="After 30 days your account will be deleted. All data will be removed from your account.";
   static const String enter_password="Enter Your Password";
 
   static const String sat="Sat";

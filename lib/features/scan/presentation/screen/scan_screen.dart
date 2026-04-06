@@ -149,7 +149,7 @@ class QRScannerScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: AppColors.red300),
+                  border: Border.all(color: AppColors.primaryColor),
                 ),
                 child: TextField(
                   controller: controller.barController,
@@ -162,7 +162,7 @@ class QRScannerScreen extends StatelessWidget {
                     hintText: AppString.userId.tr,
                     hintStyle: TextStyle(
                       fontSize: 16.sp,
-                      color: AppColors.red100,
+                      color: AppColors.primaryColor,
                       fontWeight: FontWeight.w400,
                     ),
                     border: InputBorder.none,

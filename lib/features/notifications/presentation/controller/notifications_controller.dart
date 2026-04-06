@@ -87,6 +87,7 @@ class NotificationsController extends GetxController {
         // Logic to prevent duplicate items if API returns overlapping data
         notifications.addAll(list);
       }
+      readNotification();
     } catch (e) {
       print("Error fetching notifications: $e");
     } finally {

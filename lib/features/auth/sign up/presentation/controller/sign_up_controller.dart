@@ -156,9 +156,11 @@ class SignUpController extends GetxController {
   bool isLoading = false;
   bool isLoadingVerify = false;
   bool isLoadingWork=false;
-  String completePhoneNumber = ''; // Stores phone with country code
-  String countryCode = '+880'; // Stores selected country code
-  String countryFlag = '🇧🇩';
+  var isPrivacyAccepted = false.obs;
+  String completePhoneNumber = '';
+
+  String countryCode = '+381';
+  String countryFlag = '🇷🇸';
 
   List<LocationModel> locationSuggestions = [];
   bool isLocationLoading = false;
@@ -274,6 +276,14 @@ class SignUpController extends GetxController {
 
   signUpUser() async {
     if (!signUpFormKey.currentState!.validate()) return;
+
+    if (!isPrivacyAccepted.value) {
+      Utils.errorSnackBar(
+          "Required",
+          "Please accept the Privacy Policy and Terms of Service to continue."
+      );
+      return; // Stop the function here
+    }
     //Get.toNamed(AppRoutes.verifyUser);
     print("Country code 😍😍😍😍 $countryCode");
     isLoading = true;
@@ -403,5 +413,8 @@ class SignUpController extends GetxController {
     }
     isLoadingWork = false;
     update();
+  }
+  void togglePrivacyAcceptance() {
+    isPrivacyAccepted.value = !isPrivacyAccepted.value;
   }
 }

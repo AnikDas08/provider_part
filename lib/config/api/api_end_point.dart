@@ -3,6 +3,10 @@ class ApiEndPoint {
   static const imageUrl = "https://www.velodora.com/";
   static const socketUrl = "https://www.velodora.com";
 
+  /*static const baseUrl = "http://10.10.7.26:5050/api/v1/";
+  static const imageUrl = "http://10.10.7.26:5050/";
+  static const socketUrl = "http://10.10.7.26:5050";*/
+
   static const signUp = "user/user";
   static const verifyEmail = "users/verify-email";
   static const category = "category";

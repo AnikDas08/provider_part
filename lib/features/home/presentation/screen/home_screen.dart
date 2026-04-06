@@ -243,7 +243,7 @@ class HomeScreen extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w500,
-                                  color: day.weekday == DateTime.sunday ? Colors.red : Colors.black54,
+                                  color: day.weekday == DateTime.sunday ? Colors.black : Colors.black54,
                                 ),
                               ),
                             );

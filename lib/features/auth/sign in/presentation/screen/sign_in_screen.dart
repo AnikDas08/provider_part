@@ -77,8 +77,8 @@ class SignInScreen extends StatelessWidget {
                           ).center,
 
                           /// Account Email Input here
-                          const CommonText(
-                            text: AppString.email_text,
+                           CommonText(
+                            text: AppString.email_text.tr,
                             bottom: 8,
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
@@ -86,14 +86,14 @@ class SignInScreen extends StatelessWidget {
                           ),
                           CommonTextField(
                             controller: controller.emailController,
-                            hintText: AppString.hint_email_text,
+                            hintText: AppString.hint_email_text.tr,
                             hintTextColor: AppColors.black100,
                             validator: OtherHelper.emailValidator,
                           ),
 
                           /// Account Password Input here
-                          const CommonText(
-                            text: AppString.password_text,
+                           CommonText(
+                            text: AppString.password_text.tr,
                             bottom: 8,
                             top: 24,
                             fontSize: 14,
@@ -103,7 +103,7 @@ class SignInScreen extends StatelessWidget {
                           CommonTextField(
                             controller: controller.passwordController,
                             isPassword: true,
-                            hintText: AppString.hint_password_text,
+                            hintText: AppString.hint_password_text.tr,
                             hintTextColor: AppColors.black100,
                             validator: OtherHelper.passwordValidator,
                           ),

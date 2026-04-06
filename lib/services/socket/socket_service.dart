@@ -26,8 +26,9 @@ class SocketServices {
     _socket.connect();
     _socket.on("getNotification::${LocalStorage.userId}", (data) {
       appLog("================> get Data on socket: $data");
-      NotificationService.showNotification(data);
+      Get.find<HomeController>().countMessa();
       Get.find<HomeController>().countNotification();
+      NotificationService.showNotification(data);
     });
   }
 

@@ -17,10 +17,18 @@ class ServiceCancelController extends GetxController {
   var userLocation = ''.obs;
   var serviceName = ''.obs;
   var description = '';
+  var location="".obs;
   var image = '';
   var date = ''.obs;
   var time = ''.obs;
+  var weatherFee = ''.obs;
+  var convenienceFee = ''.obs;
+  var arrivalFee = ''.obs;
+  var discount = ''.obs;
+  var total = ''.obs;
+  var totalPrice = 0.0.obs;
   var amount = ''.obs;
+  var subTotal = ''.obs;
 
   @override
   void onInit() {
@@ -45,6 +53,15 @@ class ServiceCancelController extends GetxController {
           bookingData.value = response.data['data'][0];
           description = response.data['data'][0]['bookingDescription'] ?? "N/A";
           image=response.data["data"][0]["image"]??"";
+          location.value=response.data["data"][0]["location"]??"";
+          weatherFee.value = bookingData['weatherFee']?.toString() ?? '0';
+          convenienceFee.value = bookingData['convenienceFee']?.toString() ?? '0';
+          arrivalFee.value = bookingData['arrivalFee']?.toString() ?? '0';
+          discount.value = bookingData['discount']?.toString() ?? '0';
+          total.value = bookingData['subTotal']?.toString() ?? '0';
+          totalPrice.value = (double.tryParse(total.value) ?? 0) +
+              (double.tryParse(weatherFee.value) ?? 0) +
+              (double.tryParse(arrivalFee.value) ?? 0);
           _parseBookingData();
         } else if (response.data['data'] is Map) {
           // In case API returns single object
@@ -140,6 +157,7 @@ class ServiceCancelController extends GetxController {
 
     // Amount
     amount.value = bookingData['amount']?.toString() ?? '0';
+    subTotal.value = bookingData['subTotal']?.toString() ?? '0';
 
     // Booking ID (last 4 digits)
     if (bookingData['_id'] != null && bookingData['_id'].toString().length >= 4) {

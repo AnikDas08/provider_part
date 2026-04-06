@@ -3,6 +3,7 @@ class ProviderData {
   String? id;
   User? user;  // Changed from String? to User?
   String? aboutMe;
+  int? avgDuration;
   List<Service>? services;
   List<String>? serviceLanguage;
   String? primaryLocation;
@@ -21,6 +22,7 @@ class ProviderData {
     this.id,
     this.user,
     this.aboutMe,
+    this.avgDuration,
     this.services,
     this.serviceLanguage,
     this.primaryLocation,
@@ -40,6 +42,7 @@ class ProviderData {
     id: json["_id"],
     user: json["user"] != null ? User.fromJson(json["user"]) : null,  // Parse as User object
     aboutMe: json["aboutMe"],
+    avgDuration: json["avgDuration"],
     services: json["services"] != null
         ? List<Service>.from(json["services"].map((x) => Service.fromJson(x)))
         : null,
@@ -67,6 +70,7 @@ class ProviderData {
     "_id": id,
     "user": user?.toJson(),  // Changed to toJson()
     "aboutMe": aboutMe,
+    "avgDuration": avgDuration,
     "services": services != null ? List<dynamic>.from(services!.map((x) => x.toJson())) : null,
     "serviceLanguage": serviceLanguage,
     "primaryLocation": primaryLocation,
@@ -86,6 +90,7 @@ class ProviderData {
     String? id,
     User? user,  // Changed from String? to User?
     String? aboutMe,
+    int? avgDuration,
     List<Service>? services,
     List<String>? serviceLanguage,
     String? primaryLocation,
@@ -104,6 +109,7 @@ class ProviderData {
         id: id ?? this.id,
         user: user ?? this.user,
         aboutMe: aboutMe ?? this.aboutMe,
+        avgDuration: avgDuration ?? this.avgDuration,
         services: services ?? this.services,
         serviceLanguage: serviceLanguage ?? this.serviceLanguage,
         primaryLocation: primaryLocation ?? this.primaryLocation,

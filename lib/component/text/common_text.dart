@@ -52,7 +52,7 @@ class CommonText extends StatelessWidget {
         overflow: overflow,
         style:
             style ??
-            GoogleFonts.poppins(
+            GoogleFonts.roboto(
               fontSize: fontSize.sp,
               fontWeight: fontWeight,
               color: color,

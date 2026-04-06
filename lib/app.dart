@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:haircutmen_user_app/config/languages/language_transtators.dart';
 
 import 'config/route/app_routes.dart';
@@ -22,7 +23,11 @@ class MyApp extends StatelessWidget {
         translations: Language(),
         locale: const Locale("en"),
         defaultTransition: Transition.fadeIn,
-        theme: themeData,
+        theme: themeData.copyWith(
+          textTheme: GoogleFonts.robotoTextTheme(themeData.textTheme),
+          // Fallback ensures symbols/Cyrillic show correctly
+          primaryTextTheme: GoogleFonts.robotoTextTheme(themeData.primaryTextTheme),
+        ),
         transitionDuration: const Duration(milliseconds: 300),
         initialRoute: AppRoutes.splash,
         getPages: AppRoutes.routes,

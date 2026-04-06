@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:haircutmen_user_app/utils/helpers/other_helper.dart';
+import '../../features/setting/presentation/controller/setting_controller.dart';
 import '../../services/storage/storage_services.dart';
 import '../../utils/constants/app_colors.dart';
 import '../../utils/constants/app_string.dart';
@@ -158,7 +159,8 @@ logOutPopUp() {
 }
 
 deletePopUp({
-  required TextEditingController controller,
+  required TextEditingController textController,
+  required SettingController controller,
   required VoidCallback onTap,
   bool isLoading = false,
 }) {
@@ -179,16 +181,16 @@ deletePopUp({
               children: [
                 Center(
                   child: CommonText(
-                    text: AppString.areYouSure,
+                    text: AppString.areYouSure.tr,
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
                     color: AppColors.black,
-                    maxLines: 1,
+                    maxLines: 5,
                     bottom: 24.h,
                   ),
                 ),
                 CommonText(
-                  text: AppString.password_show,
+                  text: AppString.password_show.tr,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColors.black,
@@ -196,7 +198,7 @@ deletePopUp({
                   bottom: 20.h,
                 ),
                 CommonTextField(
-                  controller: controller,
+                  controller: textController,
                   hintText: AppString.enter_password.tr,
                   isPassword: true,
                   validator: OtherHelper.validator,
@@ -229,7 +231,8 @@ deletePopUp({
                     onTap: () async {
                       if (formKey.currentState!.validate()) {
                         Get.back();
-                        confirmDelete();
+                        confirmDelete(controller: controller,
+                          textController: textController,);
                       }
                     },
                   ),
@@ -244,6 +247,8 @@ deletePopUp({
 }
 confirmDelete({
   bool isLoading = false,
+  required SettingController controller,
+  required TextEditingController textController,
 }) {
   final formKey = GlobalKey<FormState>();
   showDialog(
@@ -262,7 +267,7 @@ confirmDelete({
               children: [
                 Center(
                   child: CommonText(
-                    text: "Do you want to Delete you Account?",
+                    text: AppString.delete_account_android,
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
                     color: AppColors.black,
@@ -271,7 +276,7 @@ confirmDelete({
                   ),
                 ),
                 CommonText(
-                  text: "After 30 days your account will be deleted.All the data are remove from your account.",
+                  text: AppString.delete_after,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColors.black,
@@ -304,7 +309,7 @@ confirmDelete({
                     buttonHeight: 48.h,
                     onTap: () async {
                       if (formKey.currentState!.validate()) {
-                        Get.back();
+                        controller.deleteAccountRepo();
 
                       }
                     },

@@ -112,18 +112,19 @@ class HomeNavScreen extends StatelessWidget {
                               color: AppColors.primaryColor,
                               shape: BoxShape.circle,
                             ),
-                            child: CommonText(
-                              text: Get.find<HomeController>().message.value.toString(),      // dynamic value here
-                              color: Colors.white,
-                              fontSize: 10.sp,
-                              fontWeight: FontWeight.w600,
+                            child: Obx(
+                              () => CommonText(
+                                text: Get.find<HomeController>().message.value.toString(),      // dynamic value here
+                                color: Colors.white,
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
                       ],
                     )
                         :
-
                     SvgPicture.asset(
                       _navItems[index]["icon"]!,
                       width: isSelected ? 28.w : 24.w,
