@@ -1,4 +1,4 @@
-package com.example.haircutmen_app
+package com.example.provider_velodora
 
 import io.flutter.embedding.android.FlutterActivity
 

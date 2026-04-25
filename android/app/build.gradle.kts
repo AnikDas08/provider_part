@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.haircutmen_app"
+    namespace = "com.example.provider_velodora"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -16,7 +16,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
         isCoreLibraryDesugaringEnabled = true
     }
-
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
