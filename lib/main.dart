@@ -26,6 +26,8 @@ Future<void> main() async {
 }
 
 init() async {
+  SocketServices.connectToSocket();
+  print("socket connect here");
   DependencyInjection dI = DependencyInjection();
   dI.dependencies();
 
@@ -33,5 +35,4 @@ init() async {
     LocalStorage.getAllPrefData(),
     NotificationService.initLocalNotification(),
   ]);
-  SocketServices.connectToSocket();
 }

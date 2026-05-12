@@ -236,7 +236,7 @@ class MessageController extends GetxController {
     SocketServices.on('getMessage::$chatId', (data) {
       print("socket data : $data");
       Get.find<HomeController>().countMessa();
-      //NotificationService.showNotification(data);
+      NotificationService.showNotification(data);
 
       // Check if message already exists to avoid duplicates
       String messageId = data['_id'] ?? '';

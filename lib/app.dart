@@ -25,7 +25,6 @@ class MyApp extends StatelessWidget {
         defaultTransition: Transition.fadeIn,
         theme: themeData.copyWith(
           textTheme: GoogleFonts.robotoTextTheme(themeData.textTheme),
-          // Fallback ensures symbols/Cyrillic show correctly
           primaryTextTheme: GoogleFonts.robotoTextTheme(themeData.primaryTextTheme),
         ),
         transitionDuration: const Duration(milliseconds: 300),

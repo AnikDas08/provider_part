@@ -56,4 +56,15 @@ class SocketServices {
     }
     _socket.emitWithAck(event, data, ack: handler);
   }
+
+  static void reconnectSocket() {
+    if (_socket.connected) {
+      _socket.disconnect();
+    }
+    connectToSocket();
+  }
+
+  static bool isConnected() {
+    return _socket.connected;
+  }
 }

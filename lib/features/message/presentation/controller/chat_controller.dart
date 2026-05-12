@@ -147,7 +147,6 @@ class ChatControllers extends GetxController {
       for (var item in data) {
         chats.add(ChatModel.fromJson(item));
       }
-
       // Update filtered chats
       if (searchController.text.isEmpty) {
         filteredChats = List.from(chats);
