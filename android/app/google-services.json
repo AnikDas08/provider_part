@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "201498296151",
+    "project_id": "velodora-9cf58",
+    "storage_bucket": "velodora-9cf58.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201498296151:android:a248b4be6bfdbbe5cd0812",
+        "android_client_info": {
+          "package_name": "com.velodoraprovider.nikola"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "201498296151-mf6bs37taa090i02ir41qmn2qs2lhrgg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3i0QUCkpaqk4r_nciYslbH8zeVJk2ZKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "201498296151-mf6bs37taa090i02ir41qmn2qs2lhrgg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "201498296151-cnlol5okdichb6mata94l3ltje6qv2o4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.velodorauser.nikola"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201498296151:android:d20a6918ad3ae74acd0812",
+        "android_client_info": {
+          "package_name": "com.velodorauser.nikola"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "201498296151-mf6bs37taa090i02ir41qmn2qs2lhrgg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3i0QUCkpaqk4r_nciYslbH8zeVJk2ZKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "201498296151-mf6bs37taa090i02ir41qmn2qs2lhrgg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "201498296151-cnlol5okdichb6mata94l3ltje6qv2o4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.velodorauser.nikola"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

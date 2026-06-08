@@ -36,7 +36,6 @@ dependencies:
   get_storage: ^2.1.1
   qr_code_scanner: ^1.0.1
   qr_code_tools: ^0.2.0
-  google_sign_in: ^7.2.0
   http: ^1.6.0
   connectivity_plus: ^7.0.0
   http_parser: ^4.0.2
@@ -45,6 +44,9 @@ dependencies:
   country_picker: ^2.0.24
   flutter_launcher_icons: ^0.14.4
   translator: ^1.0.4+1
+  firebase_core: ^4.10.0
+  google_sign_in: ^6.2.1
+  firebase_auth: ^6.5.2
 
 
 

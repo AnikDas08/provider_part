@@ -49,8 +49,6 @@ class OnboardingScreen extends StatelessWidget {
               // Buttons Section
               _buildButtonsSection(),
 
-              40.height,
-              _buildSocialIcon(),
 
               // Bottom spacing
               40.height,
