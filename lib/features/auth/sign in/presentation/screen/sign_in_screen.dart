@@ -105,6 +105,7 @@ class SignInScreen extends StatelessWidget {
                           CommonTextField(
                             controller: controller.passwordController,
                             isPassword: true,
+                            textInputAction: TextInputAction.done,
                             hintText: AppString.hint_password_text.tr,
                             hintTextColor: AppColors.black100,
                             validator: OtherHelper.passwordValidator,
@@ -146,7 +147,20 @@ class SignInScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 18.h,),
-
+                  Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      10.width,
+                      const CommonText(
+                        text: "OR Sign In with",
+                        fontSize: 12,
+                        color: Color(0xff777777),
+                      ),
+                      10.width,
+                      const Expanded(child: Divider()),
+                    ],
+                  ),
+                  SizedBox(height: 18.h,),
                   _buildSocialIcon(controller)
                 ],
               ),

@@ -190,7 +190,7 @@ class SignInController extends GetxController {
         };
 
         var response = await ApiService.post(
-          ApiEndPoint.signIn,
+          "auth/social-login",
           body: body,
         ).timeout(const Duration(seconds: 30));
 
