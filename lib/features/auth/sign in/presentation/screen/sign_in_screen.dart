@@ -147,7 +147,7 @@ class SignInScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 18.h,),
-                  Row(
+                  /*Row(
                     children: [
                       const Expanded(child: Divider()),
                       10.width,
@@ -161,7 +161,7 @@ class SignInScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 18.h,),
-                  _buildSocialIcon(controller)
+                  _buildSocialIcon(controller)*/
                 ],
               ),
             ),
