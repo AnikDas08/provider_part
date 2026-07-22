@@ -34,7 +34,7 @@ dependencies:
   curved_navigation_bar: ^1.0.6
   table_calendar: ^3.2.0
   get_storage: ^2.1.1
-  qr_code_scanner: ^1.0.1
+  qr_code_scanner:
   qr_code_tools: ^0.2.0
   http: ^1.6.0
   connectivity_plus: ^7.0.0

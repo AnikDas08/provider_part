@@ -199,7 +199,6 @@ class HomeScreen extends StatelessWidget {
                         ),
 
                         calendarBuilders: CalendarBuilders(
-                          // HEADER MONTH TRANSLATION
                           headerTitleBuilder: (context, day) {
                             final year = day.year.toString();
                             final List<String> monthKeys = [
